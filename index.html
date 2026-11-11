@@ -28,18 +28,18 @@
   .hero{padding:16px 24px 20px}
   .hero h1{font-size:24px;line-height:1.4;font-weight:800;letter-spacing:-.4px}
   .hero p{margin-top:8px;font-size:16px;line-height:1.55;color:var(--g700)}
-  .row{display:flex;align-items:center;gap:16px;padding:14px 24px;width:100%;text-align:left}
-  .row:active{background:var(--g50)}
-  .row .ic{width:40px;height:40px;border-radius:12px;background:var(--g100);color:var(--g700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .row .ic svg{width:24px;height:24px}
-  .row .tx{flex:1;display:flex;flex-direction:column;gap:2px}
-  .row b{font-size:17px}
-  .row span.s{font-size:14px;color:var(--g700)}
-  .gap{height:12px;background:var(--g100);margin-top:12px}
-  .note{padding:20px 24px}
-  .note b{display:block;font-size:17px}
-  .note p{margin-top:6px;font-size:14px;line-height:1.6;color:var(--g700)}
-  .fine{margin:0 24px 12px;font-size:13px;line-height:1.55;color:var(--g700);text-align:center}
+  .ex{margin:0 20px;padding:8px;border-radius:20px;background:var(--g100);display:flex;flex-direction:column;gap:4px}
+  .ex .it{display:flex;flex-direction:column;gap:8px;padding:6px 6px 8px;border-radius:14px;width:100%;text-align:left}
+  .ex .it:active{background:var(--g200)}
+  .ex .ph{position:relative;display:block;height:92px;border-radius:12px;overflow:hidden;background:var(--g200)}
+  .ex .ph img{display:block;width:100%;height:100%;object-fit:cover}
+  .pill{position:absolute;top:8px;padding:3px 8px;border-radius:8px;background:rgba(16,17,20,.78);color:#fff;font-size:12px;font-weight:700}
+  .pill.l{left:8px}.pill.r{right:8px}
+  .ex .tx{display:flex;align-items:center;gap:8px;padding:0 2px}
+  .ex .tx>span{flex:1;display:flex;flex-direction:column;gap:1px}
+  .ex b{font-size:16px}
+  .ex small{font-size:13px;color:var(--g700)}
+  .fine{margin:16px 24px 12px;font-size:13px;line-height:1.55;color:var(--g700);text-align:center}
   .cta{padding:0 20px 24px;display:flex;flex-direction:column;gap:8px}
   .btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:16px;font-size:17px;font-weight:700;width:100%}
   .btn.pri{background:var(--blue);color:#fff}
@@ -51,11 +51,20 @@
   /* 카메라 */
   .vf{position:relative;margin:4px 12px 0;flex:1;min-height:300px;border-radius:20px;overflow:hidden;background:#22252A}
   #view{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  .split{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;display:none}
-  .lbl{position:absolute;top:12px;padding:5px 10px;border-radius:10px;background:rgba(16,17,20,.75);font-size:13px;font-weight:700;display:none}
+  .vf{touch-action:none}
+  .split{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;display:none;pointer-events:none}
+  .knob{position:absolute;top:50%;left:50%;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:18px;background:#fff;color:var(--g900);display:flex;align-items:center;justify-content:center}
+  .knob svg{width:20px;height:20px}
+  .lbl{position:absolute;top:12px;padding:5px 10px;border-radius:10px;background:rgba(16,17,20,.75);font-size:13px;font-weight:700;display:none;pointer-events:none}
   .lbl.l{left:12px}.lbl.r{right:12px}
   .vf.cmp .split,.vf.cmp .lbl{display:block}
-  .tip{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 14px;border-radius:12px;background:rgba(16,17,20,.8);font-size:14px;line-height:1.5}
+  .tip{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 14px;border-radius:12px;background:rgba(16,17,20,.82);display:flex;flex-direction:column;gap:2px;pointer-events:none}
+  .tip b{font-size:13px}
+  .tip span{font-size:14px;line-height:1.5;color:var(--g200)}
+  .guide{margin:2px 24px 0;font-size:13px;line-height:1.5;color:var(--darkTx);text-align:center;min-height:20px}
+  .chip.cmp{margin-left:auto;display:flex;align-items:center;gap:5px}
+  .chip.cmp svg{width:16px;height:16px}
+  .chip.cmp[aria-pressed=true]{background:#fff;color:var(--g900)}
   .seg{margin:14px 16px 0;padding:4px;border-radius:12px;background:var(--dark2);display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
   .seg button{height:40px;border-radius:9px;font-size:15px;font-weight:700;color:var(--darkTx)}
   .seg button[aria-pressed=true]{background:#fff;color:var(--g900)}
@@ -89,6 +98,14 @@
   .mchip svg{width:16px;height:16px;display:none}
   .mchip[aria-pressed=true] svg{display:block}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #s-result .cta{position:sticky;bottom:0;padding-top:12px;background:#fff}
+  .btn.gry{background:var(--g100);color:var(--g800)}
+  .mrows{padding:0 20px;display:flex;flex-direction:column;gap:8px}
+  .mrow{display:flex;align-items:center;gap:8px}
+  .mrow .mchip{width:112px;flex-shrink:0}
+  .mrow input{flex:1;min-width:0;height:40px;padding:0 12px;border-radius:12px;border:0;background:var(--g100);font:inherit;font-size:16px;color:var(--g900)}
+  .mrow input::placeholder{color:var(--g500)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;width:calc(100% - 40px);max-width:440px;
          padding:12px 16px;border-radius:14px;background:var(--g900);color:#fff;font-size:14px;font-weight:500;transition:all .25s;pointer-events:none;z-index:30}
   .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -124,14 +141,9 @@
   <div class="bar" style="padding-left:24px"><span class="t">누구의 눈</span></div>
   <div class="hero">
     <h1>우리 아이와 반려동물은<br>나를 어떻게 볼까요?</h1>
-    <p>보고 싶은 눈을 고르고 카메라를 비춰보세요</p>
+    <p>내 얼굴을 찍으면 가족의 눈으로 나눠 보여드려요</p>
   </div>
-  <div id="homeList"></div>
-  <div class="gap"></div>
-  <div class="note">
-    <b>사진을 찍으면 가족 시선 한 장이 만들어져요</b>
-    <p>내 사진 하나를 아기·강아지·고양이의 눈으로 나눠 보여드려요. 가족에게 바로 보낼 수 있어요.</p>
-  </div>
+  <div class="ex" id="homeList"></div>
   <div class="spacer"></div>
   <p class="fine">연구 자료로 만든 재미용 근사치예요.<br>눈 건강이 궁금하면 안과에서 확인해 주세요.</p>
   <div class="cta"><button class="btn pri" id="startBtn">카메라 켜기</button></div>
@@ -146,10 +158,11 @@
   </div>
   <div class="vf" id="vf">
     <canvas id="view"></canvas>
-    <div class="split"></div>
-    <span class="lbl l">사람</span><span class="lbl r" id="lblR">강아지</span>
-    <div class="tip" id="tip"></div>
+    <div class="split" id="split"><span class="knob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span></div>
+    <span class="lbl l">내 눈</span><span class="lbl r" id="lblR">강아지</span>
+    <div class="tip"><b id="tipStat"></b><span id="tip"></span></div>
   </div>
+  <p class="guide" id="guide"></p>
   <div class="seg" id="seg"></div>
   <div class="sub" id="sub"></div>
   <div class="shoot">
@@ -187,15 +200,17 @@
     <span class="t">누구의 눈</span>
   </div>
   <div class="rhead">
-    <h1>우리 가족은 나를 이렇게 봐요</h1>
-    <p id="hint"></p>
+    <h1 id="rTitle">우리 가족 눈에 비친 나</h1>
+    <p>이름을 넣으면 카드에 들어가요. 이름은 저장하지 않아요.</p>
   </div>
   <div class="card"><img id="cardImg" alt="가족 시선 한 장"></div>
-  <div class="lbl2">카드에 넣을 눈을 골라주세요</div>
-  <div class="chips" id="mchips"></div>
+  <div class="lbl2">카드에 넣을 가족과 이름</div>
+  <div class="mrows" id="mrows"></div>
+  <div class="lbl2">가족이 나를 부르는 말</div>
+  <div class="chips" id="callChips"></div>
   <div class="spacer" style="min-height:24px"></div>
   <div class="cta two">
-    <button class="btn sec" id="saveBtn">앨범에 저장하기</button>
+    <button class="btn gry" id="saveBtn">앨범에 저장하기</button>
     <button class="btn pri" id="shareBtn">가족에게 보내기</button>
   </div>
 </section>
@@ -233,34 +248,37 @@ const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 
 const HUMAN = {cpd:30,cvd:0,tri:0,sat:1,con:1,gam:1,gain:1,vig:9};
 const AGES = [
-  {name:'신생아', p:{cpd:1.0,cvd:0,tri:1,sat:.10,con:.45,gam:1,gain:1,vig:.22},
+  {name:'신생아', p:{cpd:1.0,cvd:0,tri:1,sat:.10,con:.45,gam:1,gain:1,vig:.22}, stat:'시력 0.03 정도 · 색은 거의 못 봐요',
    tip:'신생아는 20~30cm 앞 얼굴의 윤곽과 명암을 알아봐요. 색은 아직 거의 구분하지 못해요.',
    kv:[['시력','약 20/400~20/800'],['색','밝고 어두운 차이 위주'],['잘 보이는 거리','20~30cm']],
    desc:'눈앞 얼굴의 윤곽과 밝고 어두운 대비를 먼저 알아봐요. 시야도 좌우 30° 안팎으로 좁아요.'},
-  {name:'3개월', p:{cpd:2.5,cvd:0,tri:.6,sat:.6,con:.7,gam:1,gain:1,vig:.55},
+  {name:'3개월', p:{cpd:2.5,cvd:0,tri:.6,sat:.6,con:.7,gam:1,gain:1,vig:.55}, stat:'시력 0.05~0.1 정도',
    tip:'3개월쯤엔 움직이는 걸 눈으로 따라가고, 색이 조금씩 또렷해져요.',
    kv:[['시력','약 20/200~20/400'],['색','점점 또렷해져요'],['새로 생긴 능력','움직임 따라보기']],
    desc:'빨강·초록부터 구분하기 시작하고, 파랑·노랑 계열은 조금 더 늦게 또렷해져요.'},
-  {name:'6개월', p:{cpd:5,cvd:0,tri:.25,sat:.85,con:.82,gam:1,gain:1,vig:.78},
+  {name:'6개월', p:{cpd:5,cvd:0,tri:.25,sat:.85,con:.82,gam:1,gain:1,vig:.78}, stat:'시력 0.1~0.25 정도',
    tip:'6개월쯤엔 색을 어른과 비슷하게 보고, 거리감도 생기기 시작해요.',
    kv:[['시력','약 20/80~20/200'],['색','어른과 비슷해요'],['새로 생긴 능력','거리감']],
    desc:'두 눈을 함께 쓰면서 무엇이 가깝고 먼지 느끼기 시작해요.'},
-  {name:'12개월', p:{cpd:9,cvd:0,tri:0,sat:1,con:.94,gam:1,gain:1,vig:9},
+  {name:'12개월', p:{cpd:9,cvd:0,tri:0,sat:1,con:.94,gam:1,gain:1,vig:9}, stat:'시력 0.25~0.4 정도',
    tip:'돌 무렵엔 꽤 선명하게 봐요. 어른만큼 보려면 몇 년이 더 걸려요.',
    kv:[['시력','약 20/50~20/80'],['색','어른과 비슷해요'],['어른만큼 보는 시기','3~5살쯤']],
    desc:'기어다니며 멀리 있는 물건도 알아봐요. 선명도는 몇 년에 걸쳐 계속 좋아져요.'}
 ];
 const MODES = {
-  baby:{name:'아기', sub:'신생아부터 3살까지 자라는 시력을 봐요',
+  baby:{name:'아기', sub:'신생아부터 12개월까지 자라는 시력을 봐요',
+        guide:'아이를 안았을 때처럼 20~30cm 앞에서 내 얼굴을 비춰보세요',
         cant:'아기는 20~30cm 거리에 초점이 가장 잘 맞아요. 카메라는 거리를 알 수 없어서 거리마다 다른 흐림은 담지 못해요.',
         src:'참고: 영아 시력 발달 기준(선호주시법 측정값). 아이마다 차이가 커요.'},
   dog:{name:'강아지', sub:'빨강과 초록이 비슷한 색으로 보여요', p:{cpd:8,cvd:1,tri:0,sat:1,con:.85,gam:.88,gain:1.08,vig:9},
+       stat:'시력 0.3 정도 · 파랑과 노랑 위주로 봐요', guide:'휴대폰을 무릎 높이로 내려 나를 올려다보며 찍어보세요',
        tip:'강아지는 빨강과 초록을 비슷한 누런색으로 봐요. 잔디 위 빨간 공보다 파란 공을 더 잘 찾는 이유예요.',
        kv:[['구분하는 색','파랑·노랑 두 계열'],['선명도','사람의 약 4분의 1'],['사람보다 잘 보는 것','어두운 곳, 움직임']],
        desc:'빨강·주황·초록이 비슷한 누런색으로 보여요. 잔디밭에서 공을 던져줄 땐 파란 공이 잘 보여요.',
        cant:'강아지의 시야는 휴대폰 카메라보다 훨씬 넓어요.',
        src:'참고: Caves 외(2018) 동물 시력 비교, Machado 외(2009) 색각 모델. 재미로 보는 근사치예요.'},
   cat:{name:'고양이', sub:'색은 옅게, 어두운 곳은 밝게 봐요', p:{cpd:8.6,cvd:1,tri:0,sat:.6,con:.8,gam:.75,gain:1.15,vig:9},
+       stat:'시력 0.15 정도 · 어두운 곳에 강해요', guide:'바닥 가까이에서 나를 올려다보며 찍어보세요. 불을 조금 꺼도 좋아요',
        tip:'고양이는 색을 옅게 보는 대신, 어두운 곳을 사람보다 훨씬 밝게 봐요.',
        kv:[['구분하는 색','강아지와 비슷, 더 옅게'],['선명도','사람의 약 7분의 1'],['사람보다 잘 보는 것','어두운 곳']],
        desc:'색은 옅게 보지만 아주 적은 빛으로도 볼 수 있어요. 밤에 눈이 빛나는 것도 빛을 한 번 더 모으는 구조 덕분이에요.',
@@ -268,9 +286,16 @@ const MODES = {
        src:'참고: Caves 외(2018) 동물 시력 비교, Machado 외(2009) 색각 모델. 재미로 보는 근사치예요.'}
 };
 const ORDER=['baby','dog','cat'];
-const state = { mode:'dog', age:2, compare:true, facing:'environment', stream:null,
+const state = { mode:'dog', age:2, compare:true, split:.5, facing:'user', stream:null,
                 src:null, srcW:0, srcH:0, isVideo:false, mirror:false, dirty:true,
-                still:null, members:{baby:true,dog:true,cat:true}, cardURL:'' };
+                still:null, members:{baby:true,dog:true,cat:true}, names:{baby:'',dog:'',cat:''}, call:'엄마', cardURL:'' };
+const CALLS=['엄마','아빠'];
+const SUB = k => k==='baby' ? AGES[state.age].name : MODES[k].name;
+const VOICE = {
+  baby: c => state.age>=3 ? `이제 ${c} 얼굴이 꽤 또렷하게 보여요` : `세상은 아직 흐릿한데, ${c} 얼굴은 보여요`,
+  dog:  () => '색은 잘 몰라도, 웃는 얼굴은 알아봐요',
+  cat:  c => `불을 꺼도, ${c}는 내가 제일 잘 찾아요`
+};
 const P = () => state.mode==='baby' ? AGES[state.age].p : MODES[state.mode].p;
 const modeLabel = (k=state.mode) => k==='baby' ? `아기 · ${AGES[state.age].name}` : MODES[k].name;
 
@@ -291,8 +316,8 @@ $$('[data-back]').forEach(b=>b.onclick=()=>history.back());
 let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),3200); }
 
 /* ---------- 홈 ---------- */
-$('#homeList').innerHTML = ORDER.map(k=>`<button class="row" data-mode="${k}"><span class="ic">${ICON[k]}</span><span class="tx"><b>${MODES[k].name}의 눈</b><span class="s">${MODES[k].sub}</span></span>${CHEV}</button>`).join('');
-$$('#homeList .row').forEach(b=>b.onclick=()=>{ state.mode=b.dataset.mode; refreshCam(); startCam(); });
+$('#homeList').innerHTML = ORDER.map(k=>`<button class="it" data-mode="${k}"><span class="ph"><img src="assets/ex-${k}.jpg" alt="왼쪽은 내 눈, 오른쪽은 ${MODES[k].name} 눈으로 본 얼굴"><span class="pill l">내 눈</span><span class="pill r">${MODES[k].name}</span></span><span class="tx"><span><b>${MODES[k].name}의 눈</b><small>${MODES[k].sub}</small></span>${CHEV}</span></button>`).join('');
+$$('#homeList .it').forEach(b=>b.onclick=()=>{ state.mode=b.dataset.mode; refreshCam(); startCam(); });
 $('#startBtn').onclick=()=>{ refreshCam(); startCam(); };
 
 /* ---------- 카메라 UI ---------- */
@@ -301,16 +326,29 @@ $$('#seg button').forEach(b=>b.onclick=()=>{ state.mode=b.dataset.k; refreshCam(
 function refreshCam(){
   $$('#seg button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===state.mode));
   const baby = state.mode==='baby';
-  $('#sub').innerHTML = baby
-    ? AGES.map((a,i)=>`<button class="chip" data-a="${i}" aria-pressed="${i===state.age}">${a.name}</button>`).join('')
-    : `<button class="chip" id="cmpChip" aria-pressed="${state.compare}">사람 눈과 반반 보기</button>`;
-  if(baby) $$('#sub .chip').forEach(c=>c.onclick=()=>{ state.age=+c.dataset.a; refreshCam(); });
-  else $('#cmpChip').onclick=()=>{ state.compare=!state.compare; refreshCam(); };
-  $('#vf').classList.toggle('cmp', !baby && state.compare);
-  $('#lblR').textContent = MODES[state.mode].name;
-  $('#tip').textContent = baby ? AGES[state.age].tip : MODES[state.mode].tip;
+  $('#sub').innerHTML = (baby ? AGES.map((a,i)=>`<button class="chip" data-a="${i}" aria-pressed="${i===state.age}">${a.name}</button>`).join('') : '')
+    + `<button class="chip cmp" id="cmpChip" aria-pressed="${state.compare}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M12 5v14"/></svg>반반 보기</button>`;
+  if(baby) $$('#sub .chip[data-a]').forEach(c=>c.onclick=()=>{ state.age=+c.dataset.a; refreshCam(); });
+  $('#cmpChip').onclick=()=>{ state.compare=!state.compare; refreshCam(); };
+  $('#vf').classList.toggle('cmp', state.compare);
+  $('#lblR').textContent = modeLabel();
+  const d = baby ? AGES[state.age] : MODES[state.mode];
+  $('#tipStat').textContent = d.stat; $('#tip').textContent = d.tip;
+  $('#guide').textContent = MODES[state.mode].guide;
   state.dirty=true;
 }
+
+/* 비교선: 화면을 끌어서 옮겨요 (canvas는 object-fit: cover라 표시 영역 기준으로 환산) */
+function coverBox(){ const r=gc.getBoundingClientRect(); const W=gc.width||1, H=gc.height||1;
+  const s=Math.max(r.width/W, r.height/H); return {r, x0:(r.width-W*s)/2, dw:W*s}; }
+function placeSplit(){ const b=coverBox(); $('#split').style.left = (b.x0 + state.split*b.dw)+'px'; }
+let dragging=false;
+function moveSplit(e){ const b=coverBox(); const u=(e.clientX-b.r.left-b.x0)/b.dw;
+  state.split=Math.min(.92,Math.max(.08,u)); placeSplit(); state.dirty=true; }
+$('#vf').addEventListener('pointerdown',e=>{ if(!state.compare) return; dragging=true; $('#vf').setPointerCapture(e.pointerId); moveSplit(e); });
+$('#vf').addEventListener('pointermove',e=>{ if(dragging) moveSplit(e); });
+['pointerup','pointercancel'].forEach(t=>$('#vf').addEventListener(t,()=>dragging=false));
+addEventListener('resize',placeSplit);
 
 /* ---------- 카메라 / 사진 ---------- */
 const video=document.createElement('video'); video.playsInline=true; video.muted=true; video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
@@ -381,7 +419,7 @@ const W7=[0,1,2,3,4,5,6].map(i=>Math.exp(-.5*(i/2)**2)); const WS=W7[0]+2*W7.sli
 const T3=m=>[m[0],m[3],m[6],m[1],m[4],m[7],m[2],m[5],m[8]];
 const DEUT=[.367322,.860646,-.227968,.280085,.672501,.047413,-.011820,.042940,.968881];
 const TRIT=[1.255528,-.076749,-.178779,-.078411,.930809,.147602,.004733,.691367,.303900];
-const BOOST=4, HFOV=65;
+const BOOST=2, HFOV=65; // 4 → 2: 흐림보다 색·밝기 차이가 보이도록 (E안 결정)
 function draw(p,fb,w,h){ gl.useProgram(p); gl.bindFramebuffer(gl.FRAMEBUFFER,fb); gl.viewport(0,0,w,h); gl.drawArrays(gl.TRIANGLE_STRIP,0,4); }
 function bindT(u,t){ gl.activeTexture(gl.TEXTURE0+u); gl.bindTexture(gl.TEXTURE_2D,t); }
 function render(src,sw,sh,mirror,p,split){
@@ -406,8 +444,8 @@ function render(src,sw,sh,mirror,p,split){
 }
 function loop(){
   if(current==='cam' && state.src && state.srcW && (state.dirty||state.isVideo) && !(state.isVideo && video.readyState<2)){
-    const cmp = state.mode!=='baby' && state.compare;
-    render(state.src,state.srcW,state.srcH,state.mirror,P(),cmp?.5:-1); state.dirty=false;
+    render(state.src,state.srcW,state.srcH,state.mirror,P(),state.compare?state.split:-1); state.dirty=false;
+    if(state.compare) placeSplit();
   }
   requestAnimationFrame(loop);
 }
@@ -447,35 +485,52 @@ $('#shutter').onclick=()=>{
   g.drawImage(state.src,0,0,c.width,c.height);
   state.still=c; buildCard(); go('result');
 };
-$('#mchips').innerHTML = ORDER.map(k=>`<button class="mchip" data-k="${k}">${CHECK}${MODES[k].name}</button>`).join('');
-$$('#mchips .mchip').forEach(b=>b.onclick=()=>{ state.members[b.dataset.k]=!state.members[b.dataset.k]; buildCard(); });
+$('#mrows').innerHTML = ORDER.map(k=>`<div class="mrow"><button class="mchip" data-k="${k}">${CHECK}${MODES[k].name}</button>
+  <label style="flex:1;min-width:0;display:flex"><span class="sr">${MODES[k].name} 이름</span><input type="text" data-k="${k}" maxlength="8" placeholder="이름 (선택)" autocomplete="off"></label></div>`).join('');
+$$('#mrows .mchip').forEach(b=>b.onclick=()=>{ const k=b.dataset.k;
+  if(state.members[k] && ORDER.filter(x=>state.members[x]).length===1){ toast('카드에는 한 명 이상 있어야 해요'); return; }
+  state.members[k]=!state.members[k]; buildCard(); });
+let nameT; $$('#mrows input').forEach(inp=>inp.oninput=()=>{ state.names[inp.dataset.k]=inp.value.trim(); clearTimeout(nameT); nameT=setTimeout(buildCard,300); });
+$('#callChips').innerHTML = CALLS.map(c=>`<button class="mchip" data-c="${c}">${CHECK}${c}</button>`).join('');
+$$('#callChips .mchip').forEach(b=>b.onclick=()=>{ state.call=b.dataset.c; buildCard(); });
+const tagOf = k => state.names[k] ? `${state.names[k]} · ${SUB(k)}` : modeLabel(k);
+function cardTitle(){ const on=ORDER.filter(k=>state.members[k]);
+  return on.length===1 && state.names[on[0]] ? `${state.names[on[0]]} 눈에 비친 나` : '우리 가족 눈에 비친 나'; }
 
 function rr(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+/* 카드: 줄마다 왼쪽은 내 눈, 오른쪽은 가족의 눈. 아래 한 줄은 그 아이 목소리 */
 function buildCard(){
-  $$('#mchips .mchip').forEach(b=>b.setAttribute('aria-pressed', !!state.members[b.dataset.k]));
+  $$('#mrows .mchip').forEach(b=>b.setAttribute('aria-pressed', !!state.members[b.dataset.k]));
+  $$('#callChips .mchip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.c===state.call));
+  const title=cardTitle(); $('#rTitle').textContent=title;
   const st=state.still; if(!st) return;
-  const tiles=[{label:'나',p:HUMAN}].concat(ORDER.filter(k=>state.members[k]).map(k=>({label:modeLabel(k),p:k==='baby'?AGES[state.age].p:MODES[k].p})));
-  const T=520, G=12, PAD=24, cols=tiles.length===1?1:2, rows=Math.ceil(tiles.length/cols), FOOT=88;
-  const cw = cols===1 ? T+PAD*2 : T*2+G+PAD*2, ch = PAD+rows*T+(rows-1)*G+FOOT;
-  const cv=document.createElement('canvas'); cv.width=cw; cv.height=ch; const g=cv.getContext('2d');
-  g.fillStyle='#F2F4F6'; g.fillRect(0,0,cw,ch);
-  const side=Math.min(st.width,st.height), sx=(st.width-side)/2, sy=(st.height-side)/2;
-  tiles.forEach((t,i)=>{
-    render(st,st.width,st.height,false,t.p,-1);
-    const x=PAD+(i%cols)*(T+G), y=PAD+Math.floor(i/cols)*(T+G);
-    const k=gc.width/st.width;
-    g.save(); rr(g,x,y,T,T,24); g.clip(); g.drawImage(gc,sx*k,sy*k,side*k,side*k,x,y,T,T); g.restore();
-    g.font='700 36px Pretendard, "Apple SD Gothic Neo", sans-serif'; const tw=g.measureText(t.label).width;
-    g.fillStyle='rgba(16,17,20,.75)'; rr(g,x+16,y+T-76,tw+36,60,18); g.fill();
-    g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(t.label,x+34,y+T-46);
+  const on=ORDER.filter(k=>state.members[k]);
+  const F='Pretendard, "Apple SD Gothic Neo", sans-serif';
+  const CW=1080, PAD=56, SW=CW-PAD*2, SH=on.length===1?Math.round(SW*.8):Math.round(SW/2.8), HEAD=110, ROW=SH+92, GAP=28, FOOT=110;
+  const ch=PAD+HEAD+on.length*ROW+(on.length-1)*GAP+FOOT;
+  const cv=document.createElement('canvas'); cv.width=CW; cv.height=ch; const g=cv.getContext('2d');
+  g.fillStyle='#FFFFFF'; g.fillRect(0,0,CW,ch);
+  g.fillStyle='#191F28'; g.font=`800 52px ${F}`; g.textBaseline='alphabetic'; g.fillText(title,PAD,PAD+52);
+  const pill=(txt,x,y,right)=>{ g.font=`700 28px ${F}`; const tw=g.measureText(txt).width, w=tw+32;
+    const px=right?x-w:x; g.fillStyle='rgba(16,17,20,.78)'; rr(g,px,y,w,48,14); g.fill();
+    g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(txt,px+16,y+25); };
+  on.forEach((k,i)=>{
+    const p = k==='baby' ? AGES[state.age].p : MODES[k].p;
+    render(st,st.width,st.height,false,p,.5);
+    const W=gc.width, H=gc.height, ar=SW/SH;
+    let cw=W, chh=W/ar; if(chh>H){ chh=H; cw=H*ar; }
+    const cx=(W-cw)/2, cy=Math.min(H-chh,Math.max(0,H*.42-chh/2));
+    const y=PAD+HEAD+i*(ROW+GAP);
+    g.save(); rr(g,PAD,y,SW,SH,28); g.clip(); g.drawImage(gc,cx,cy,cw,chh,PAD,y,SW,SH);
+    g.fillStyle='#fff'; g.fillRect(PAD+SW/2-2,y,4,SH); g.restore();
+    pill('내 눈',PAD+18,y+18,false); pill(tagOf(k),PAD+SW-18,y+18,true);
+    g.fillStyle='#191F28'; g.font=`700 36px ${F}`; g.textBaseline='alphabetic'; g.fillText(VOICE[k](state.call),PAD+4,y+SH+60);
   });
   const d=new Date(); const ds=`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}`;
-  g.fillStyle='#4E5968'; g.font='500 30px Pretendard, "Apple SD Gothic Neo", sans-serif'; g.textBaseline='middle';
-  g.fillText(ds,PAD+8,ch-FOOT/2); g.textAlign='right'; g.font='700 30px Pretendard, "Apple SD Gothic Neo", sans-serif'; g.fillText('누구의 눈',cw-PAD-8,ch-FOOT/2);
+  g.textBaseline='middle'; g.fillStyle='#191F28'; g.font=`800 32px ${F}`; g.fillText('누구의 눈',PAD+4,ch-FOOT/2);
+  g.textAlign='right'; g.fillStyle='#4E5968'; g.font=`500 28px ${F}`; g.fillText(ds,CW-PAD-4,ch-FOOT/2); g.textAlign='left';
   state.cardURL=cv.toDataURL('image/jpeg',.92); state.cardCanvas=cv; $('#cardImg').src=state.cardURL;
-  $('#hint').textContent = state.members.dog ? '강아지 칸에서 빨간색이 누렇게 바뀐 걸 찾아보세요'
-    : state.members.baby ? '아기 칸이 얼마나 흐린지 비교해 보세요'
-    : state.members.cat ? '고양이 칸은 색이 옅고 어두운 곳이 밝아져요' : '넣고 싶은 눈을 골라주세요';
+  $('#cardImg').alt = title+'. '+on.map(k=>`${tagOf(k)}: ${VOICE[k](state.call)}`).join(' ');
   state.dirty=true;
 }
 function cardBlob(){ return new Promise(r=>state.cardCanvas.toBlob(r,'image/jpeg',.92)); }
@@ -488,13 +543,13 @@ $('#saveBtn').onclick=async()=>{
 };
 $('#shareBtn').onclick=async()=>{
   try{ const f=new File([await cardBlob()],'누구의눈.jpg',{type:'image/jpeg'});
-    if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'누구의 눈',text:'우리 가족은 나를 이렇게 봐요 '+location.href}); return; }
+    if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'누구의 눈',text:cardTitle()+' '+location.href}); return; }
     if(navigator.share){ await navigator.share({title:'누구의 눈',text:'우리 아이와 반려동물은 나를 어떻게 볼까요?',url:location.href}); return; }
   }catch(e){ if(e.name==='AbortError') return; }
   download(); toast('이 브라우저는 바로 보내기를 지원하지 않아서 사진으로 저장했어요');
 };
 
-refreshCam(); requestAnimationFrame(loop);
+refreshCam(); buildCard(); requestAnimationFrame(loop);
 })();
 </script>
 </body>

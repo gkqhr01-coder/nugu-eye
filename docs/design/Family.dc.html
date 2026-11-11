@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가족 시선 한 장 결과</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:"Noto Sans KR",system-ui,sans-serif}
+a{color:#191F28;text-decoration:none}a:hover{color:#2272EB}
+button,input{font-family:inherit}
+button{cursor:pointer}
+input::placeholder{color:#8B95A1}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; color: #191F28; display: flex; flex-direction: column; font-family: 'Noto Sans KR', system-ui, sans-serif; overflow: hidden; position: relative">
+
+  <div aria-label="토스 제공 내비게이션 바" style="height: 52px; padding: 0 12px 0 8px; display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed #D1D6DB; flex-shrink: 0">
+    <a href="Camera.dc.html" aria-label="뒤로" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <span style="width: 22px; height: 22px; border-radius: 6px; background: #E5E8EB"></span>
+    <span style="font-size: 15px; font-weight: 700; flex: 1">누구의 눈</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#4E5968" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4E5968" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+  </div>
+
+  <div style="padding: 16px 24px 12px">
+    <h1 style="margin: 0; font-size: 22px; line-height: 1.4; font-weight: 800">{{title}}</h1>
+  </div>
+
+  <div style="margin: 0 20px; padding: 12px; border-radius: 20px; border: 1px solid #E5E8EB; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <div style="position: relative; height: {{rowH}}px; border-radius: 12px; overflow: hidden; background: #E5E8EB">
+          <img src="{{r.src}}" alt="{{r.alt}}" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          <span style="position: absolute; left: 8px; top: 8px; padding: 2px 7px; border-radius: 7px; background: rgba(16,17,20,0.78); color: #FFFFFF; font-size: 11px; font-weight: 700">내 눈</span>
+          <span style="position: absolute; right: 8px; top: 8px; padding: 2px 7px; border-radius: 7px; background: rgba(16,17,20,0.78); color: #FFFFFF; font-size: 11px; font-weight: 700">{{r.tag}}</span>
+        </div>
+        <span style="font-size: 14px; font-weight: 700; padding: 0 2px">{{r.voice}}</span>
+      </div>
+    </sc-for>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 2px">
+      <span style="font-size: 12px; font-weight: 800">누구의 눈</span>
+      <span style="font-size: 12px; color: #4E5968">2026. 11. 11</span>
+    </div>
+  </div>
+
+  <div style="padding: 16px 24px 8px; font-size: 15px; font-weight: 700">카드에 넣을 가족과 이름</div>
+  <div style="padding: 0 20px; display: flex; flex-direction: column; gap: 8px">
+    <sc-for list="{{members}}" as="m" hint-placeholder-count="3">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <button onClick="{{m.toggle}}" aria-pressed="{{m.on}}" style="width: 112px; height: 40px; padding: 0 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; border: 1px solid {{m.line}}; background: {{m.bg}}; color: {{m.fg}}; flex-shrink: 0">
+          <sc-if value="{{m.on}}" hint-placeholder-val="{{ true }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+          </sc-if>
+          {{m.kind}}
+        </button>
+        <label style="flex: 1; min-width: 0">
+          <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">{{m.kind}} 이름</span>
+          <input type="text" value="{{m.name}}" onChange="{{m.rename}}" maxlength="8" placeholder="이름 (선택)" style="width: 100%; box-sizing: border-box; height: 40px; padding: 0 12px; border-radius: 12px; border: 0; background: #F2F4F6; color: #191F28; font-size: 15px">
+        </label>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="flex: 1"></div>
+
+  <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="margin: 0 20px 10px; padding: 12px 16px; border-radius: 14px; background: #191F28; color: #FFFFFF; font-size: 14px; font-weight: 500">앨범에 저장했어요. 가족에게도 보내보세요</div>
+  </sc-if>
+  <div style="padding: 0 20px 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+    <button onClick="{{save}}" style="height: 56px; border-radius: 16px; border: 0; background: #F2F4F6; color: #333D4B; font-size: 16px; font-weight: 700">앨범에 저장하기</button>
+    <button style="height: 56px; border-radius: 16px; border: 0; background: {{primary}}; color: {{onPrimary}}; font-size: 16px; font-weight: 700">가족에게 보내기</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"primary":{"editor":"color","default":"#2272EB","options":["#2272EB","#FFC21A","#4E46DC"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { on: { baby: true, dog: true, cat: true }, names: { baby: '콩이', dog: '보리', cat: '' }, saved: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const primary = this.props.primary ?? '#2272EB';
+    const M = [
+      { k: 'baby', kind: '아기', sub: '6개월', voice: '세상은 아직 흐릿한데, 엄마 얼굴은 보여요', src: '/_blob/3839d94ceec40d64f2854cf763a1aa30' },
+      { k: 'dog', kind: '강아지', sub: '강아지', voice: '색은 잘 몰라도, 웃는 얼굴은 알아봐요', src: '/_blob/df11866f50ec168ed2b71526956c4520' },
+      { k: 'cat', kind: '고양이', sub: '고양이', voice: '불을 꺼도, 엄마는 내가 제일 잘 찾아요', src: '/_blob/24ddab86284fab463ed9a84ace1dc183' }
+    ];
+    const label = (m) => {
+      const n = (s.names[m.k] || '').trim();
+      return n ? n + ' · ' + m.sub : (m.k === 'baby' ? '아기 · 6개월' : m.kind);
+    };
+    const active = M.filter((m) => s.on[m.k]);
+    const rows = active.map((m) => ({ tag: label(m), voice: m.voice, src: m.src, alt: '왼쪽은 내가 보는 나, 오른쪽은 ' + label(m) + '가 보는 나' }));
+    const rowH = rows.length === 1 ? 220 : rows.length === 2 ? 132 : 84;
+    const only = active.length === 1 ? (s.names[active[0].k] || '').trim() : '';
+    const title = only ? only + ' 눈에 비친 나' : '우리 가족 눈에 비친 나';
+    const set = (k, patch) => this.setState({ [k]: Object.assign({}, s[k], patch), saved: false });
+    return {
+      title,
+      rows,
+      rowH,
+      primary,
+      onPrimary: primary.toUpperCase() === '#FFC21A' ? '#191F28' : '#FFFFFF',
+      saved: s.saved,
+      save: () => this.setState({ saved: true }),
+      members: M.map((m) => {
+        const on = !!s.on[m.k];
+        const last = on && active.length === 1;
+        return {
+          kind: m.kind,
+          on,
+          name: s.names[m.k],
+          line: on ? '#191F28' : '#D1D6DB',
+          bg: on ? '#191F28' : '#FFFFFF',
+          fg: on ? '#FFFFFF' : '#4E5968',
+          toggle: () => { if (!last) set('on', { [m.k]: !on }); },
+          rename: (e) => set('names', { [m.k]: e.target.value })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>대표색 후보</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>body{margin:0;font-family:"Noto Sans KR",system-ui,sans-serif}a{color:#2272EB}a:hover{color:#1B5BC9}</style>
+</helmet>
+<div style="width: 960px; height: 700px; box-sizing: border-box; padding: 36px 40px; background: #FFFFFF; color: #191F28; font-family: 'Noto Sans KR', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px; position: relative">
+  <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+    <defs>
+      <filter id="b-dog" x="0" y="0" width="1" height="1"><feColorMatrix type="matrix" values="0.367 0.861 -0.228 0 0 0.280 0.673 0.047 0 0 -0.012 0.043 0.969 0 0 0 0 0 1 0"></feColorMatrix></filter>
+    </defs>
+  </svg>
+
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <h1 style="margin: 0; font-size: 26px; font-weight: 800">대표색 후보 3개</h1>
+    <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #4E5968">강아지·고양이는 파랑과 노랑을 잘 구분해요. 그래서 두 눈 모두에서 색이 거의 그대로인 파랑·노랑 쪽에서 골랐어요.<br>오른쪽 열은 같은 화면을 강아지 눈 필터로 본 모습이에요.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 200px repeat(2, minmax(0, 1fr)); column-gap: 24px; row-gap: 14px; align-items: center">
+    <span></span>
+    <span style="font-size: 13px; font-weight: 700; color: #4E5968">사람 눈</span>
+    <span style="font-size: 13px; font-weight: 700; color: #4E5968">강아지 눈</span>
+
+    <sc-for list="{{cands}}" as="c" hint-placeholder-count="3">
+      <div style="display: flex; flex-direction: column; gap: 3px">
+        <span style="font-size: 17px; font-weight: 800">{{c.name}}</span>
+        <span style="font-size: 13px; color: #4E5968">{{c.hex}} · 글자 {{c.textName}}</span>
+        <span style="font-size: 13px; line-height: 1.5; color: #4E5968">{{c.note}}</span>
+      </div>
+      <div style="padding: 16px; border-radius: 16px; background: #F9FAFB; display: flex; align-items: center; gap: 14px">
+        <span style="width: 64px; height: 64px; border-radius: 16px; background: {{c.hex}}; color: {{c.text}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </span>
+        <span style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+          <span style="height: 44px; border-radius: 12px; background: {{c.hex}}; color: {{c.text}}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700">카메라 켜기</span>
+          <span style="display: flex; gap: 6px">
+            <span style="height: 30px; padding: 0 12px; border-radius: 15px; background: {{c.soft}}; color: {{c.softText}}; display: flex; align-items: center; font-size: 13px; font-weight: 700">아기 · 6개월</span>
+            <span style="height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid #D1D6DB; color: #4E5968; display: flex; align-items: center; font-size: 13px; font-weight: 700">강아지</span>
+          </span>
+        </span>
+      </div>
+      <div style="padding: 16px; border-radius: 16px; background: #F9FAFB; display: flex; align-items: center; gap: 14px; filter: url(#b-dog)">
+        <span style="width: 64px; height: 64px; border-radius: 16px; background: {{c.hex}}; color: {{c.text}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </span>
+        <span style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+          <span style="height: 44px; border-radius: 12px; background: {{c.hex}}; color: {{c.text}}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700">카메라 켜기</span>
+          <span style="display: flex; gap: 6px">
+            <span style="height: 30px; padding: 0 12px; border-radius: 15px; background: {{c.soft}}; color: {{c.softText}}; display: flex; align-items: center; font-size: 13px; font-weight: 700">아기 · 6개월</span>
+            <span style="height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid #D1D6DB; color: #4E5968; display: flex; align-items: center; font-size: 13px; font-weight: 700">강아지</span>
+          </span>
+        </span>
+      </div>
+    </sc-for>
+  </div>
+
+  <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #4E5968">로고 모양은 자리만 잡은 거예요. 600×600 로고와 최종 대표색은 아직 정하지 않았어요. 시작·결과 화면의 Tweaks에서 세 색을 바로 바꿔 볼 수 있어요.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":960,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      cands: [
+        { name: 'A · 토스 파랑', hex: '#2272EB', text: '#FFFFFF', textName: '흰색', soft: '#E8F0FD', softText: '#1B5BC9', note: '지금 쓰는 색. 토스와 잘 붙지만 앱만의 인상은 약해요.' },
+        { name: 'B · 해바라기 노랑', hex: '#FFC21A', text: '#191F28', textName: '검정', soft: '#FFF4D1', softText: '#7A5300', note: '토스 안에서 눈에 띄어요. 버튼 글자는 검정이어야 읽혀요.' },
+        { name: 'C · 인디고', hex: '#4E46DC', text: '#FFFFFF', textName: '흰색', soft: '#ECEBFC', softText: '#3A33B0', note: '파랑과 구분되면서 차분해요. 강아지 눈에선 파랑으로 보여요.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

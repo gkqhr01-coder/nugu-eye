@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>시선 카메라 화면</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:"Noto Sans KR",system-ui,sans-serif}
+a{color:#FFFFFF;text-decoration:none}a:hover{color:#E5E8EB}
+button{font-family:inherit;cursor:pointer}
+.splitter{-webkit-appearance:none;appearance:none;background:transparent;margin:0;cursor:ew-resize}
+.splitter::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:488px}
+.splitter::-moz-range-thumb{width:44px;height:488px;border:0;background:transparent}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #101114; color: #FFFFFF; display: flex; flex-direction: column; font-family: 'Noto Sans KR', system-ui, sans-serif; position: relative; overflow: hidden">
+
+  <div aria-label="토스 제공 내비게이션 바, 투명 배경 어두운 테마" style="height: 52px; padding: 0 12px 0 8px; display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed rgba(255,255,255,0.22)">
+    <a href="Main.dc.html" aria-label="뒤로" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <span style="flex: 1"></span>
+    <a href="Info.dc.html" aria-label="이 눈에 대해 알아보기" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+    </a>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+  </div>
+
+  <div style="position: relative; margin: 8px 12px 0; height: 488px; border-radius: 20px; overflow: hidden; background: #22252A">
+    <svg viewBox="0 0 390 520" width="366" height="488" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="display: block; position: absolute; inset: 0">
+      <defs>
+        <filter id="c-dog" x="0" y="0" width="1" height="1"><feColorMatrix type="matrix" values="0.367 0.861 -0.228 0 0 0.280 0.673 0.047 0 0 -0.012 0.043 0.969 0 0 0 0 0 1 0"></feColorMatrix><feGaussianBlur stdDeviation="1.6"></feGaussianBlur></filter>
+        <filter id="c-cat" x="0" y="0" width="1" height="1"><feColorMatrix type="matrix" values="0.367 0.861 -0.228 0 0 0.280 0.673 0.047 0 0 -0.012 0.043 0.969 0 0 0 0 0 1 0"></feColorMatrix><feColorMatrix type="saturate" values="0.55"></feColorMatrix><feGaussianBlur stdDeviation="1.9"></feGaussianBlur><feComponentTransfer><feFuncR type="gamma" amplitude="1.05" exponent="0.8" offset="0"></feFuncR><feFuncG type="gamma" amplitude="1.05" exponent="0.8" offset="0"></feFuncG><feFuncB type="gamma" amplitude="1.05" exponent="0.8" offset="0"></feFuncB></feComponentTransfer></filter>
+        <filter id="c-b0" x="0" y="0" width="1" height="1"><feColorMatrix type="saturate" values="0.1"></feColorMatrix><feGaussianBlur stdDeviation="10"></feGaussianBlur><feComponentTransfer><feFuncR type="linear" slope="0.45" intercept="0.22"></feFuncR><feFuncG type="linear" slope="0.45" intercept="0.22"></feFuncG><feFuncB type="linear" slope="0.45" intercept="0.22"></feFuncB></feComponentTransfer></filter>
+        <filter id="c-b3" x="0" y="0" width="1" height="1"><feColorMatrix type="saturate" values="0.55"></feColorMatrix><feGaussianBlur stdDeviation="6"></feGaussianBlur><feComponentTransfer><feFuncR type="linear" slope="0.7" intercept="0.1"></feFuncR><feFuncG type="linear" slope="0.7" intercept="0.1"></feFuncG><feFuncB type="linear" slope="0.7" intercept="0.1"></feFuncB></feComponentTransfer></filter>
+        <filter id="c-b6" x="0" y="0" width="1" height="1"><feColorMatrix type="saturate" values="0.85"></feColorMatrix><feGaussianBlur stdDeviation="3.5"></feGaussianBlur><feComponentTransfer><feFuncR type="linear" slope="0.85" intercept="0.05"></feFuncR><feFuncG type="linear" slope="0.85" intercept="0.05"></feFuncG><feFuncB type="linear" slope="0.85" intercept="0.05"></feFuncB></feComponentTransfer></filter>
+        <filter id="c-b12" x="0" y="0" width="1" height="1"><feGaussianBlur stdDeviation="1.8"></feGaussianBlur></filter>
+      </defs>
+      <g filter="url(#{{fid}})">
+        <rect x="-40" y="-40" width="470" height="340" fill="#8EC3EE"></rect>
+        <circle cx="322" cy="72" r="34" fill="#FFD45C"></circle>
+        <circle cx="58" cy="250" r="44" fill="#E9A3B5"></circle>
+        <circle cx="112" cy="268" r="34" fill="#E9A3B5"></circle>
+        <rect x="-40" y="296" width="470" height="270" fill="#5DA544"></rect>
+        <rect x="128" y="246" width="134" height="74" rx="20" fill="#E05A5A"></rect>
+        <ellipse cx="195" cy="178" rx="66" ry="80" fill="#F2C9A6"></ellipse>
+        <path d="M127 160 C127 92 263 92 263 160 C240 126 150 126 127 160 Z" fill="#3A2A20"></path>
+        <circle cx="170" cy="182" r="8" fill="#222222"></circle>
+        <circle cx="220" cy="182" r="8" fill="#222222"></circle>
+        <path d="M172 214 Q195 236 218 214" stroke="#B0503C" stroke-width="6" fill="none" stroke-linecap="round"></path>
+        <circle cx="78" cy="420" r="40" fill="#D8262C"></circle>
+        <circle cx="200" cy="462" r="40" fill="#2A5FD8"></circle>
+        <circle cx="316" cy="412" r="40" fill="#F2D02A"></circle>
+      </g>
+    </svg>
+    <sc-if value="{{compare}}" hint-placeholder-val="{{ true }}">
+      <div style="position: absolute; inset: 0; clip-path: inset(0 {{rest}}% 0 0)">
+        <svg viewBox="0 0 390 520" width="366" height="488" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="display: block">
+          <rect x="-40" y="-40" width="470" height="340" fill="#8EC3EE"></rect>
+          <circle cx="322" cy="72" r="34" fill="#FFD45C"></circle>
+          <circle cx="58" cy="250" r="44" fill="#E9A3B5"></circle>
+          <circle cx="112" cy="268" r="34" fill="#E9A3B5"></circle>
+          <rect x="-40" y="296" width="470" height="270" fill="#5DA544"></rect>
+          <rect x="128" y="246" width="134" height="74" rx="20" fill="#E05A5A"></rect>
+          <ellipse cx="195" cy="178" rx="66" ry="80" fill="#F2C9A6"></ellipse>
+          <path d="M127 160 C127 92 263 92 263 160 C240 126 150 126 127 160 Z" fill="#3A2A20"></path>
+          <circle cx="170" cy="182" r="8" fill="#222222"></circle>
+          <circle cx="220" cy="182" r="8" fill="#222222"></circle>
+          <path d="M172 214 Q195 236 218 214" stroke="#B0503C" stroke-width="6" fill="none" stroke-linecap="round"></path>
+          <circle cx="78" cy="420" r="40" fill="#D8262C"></circle>
+          <circle cx="200" cy="462" r="40" fill="#2A5FD8"></circle>
+          <circle cx="316" cy="412" r="40" fill="#F2D02A"></circle>
+        </svg>
+      </div>
+      <div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: {{split}}%; width: 2px; margin-left: -1px; background: #FFFFFF; pointer-events: none"></div>
+      <div aria-hidden="true" style="position: absolute; top: 200px; left: {{split}}%; width: 36px; height: 36px; margin-left: -18px; border-radius: 18px; background: #FFFFFF; color: #191F28; display: flex; align-items: center; justify-content: center; pointer-events: none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"></path></svg>
+      </div>
+      <input class="splitter" type="range" min="8" max="92" step="1" value="{{split}}" onChange="{{onSplit}}" aria-label="비교선 옮기기" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0">
+      <span style="position: absolute; top: 12px; left: 12px; padding: 5px 10px; border-radius: 10px; background: rgba(16,17,20,0.75); font-size: 13px; font-weight: 700; pointer-events: none">사람</span>
+      <span style="position: absolute; top: 12px; right: 12px; padding: 5px 10px; border-radius: 10px; background: rgba(16,17,20,0.75); font-size: 13px; font-weight: 700; pointer-events: none">{{short}}</span>
+    </sc-if>
+    <div style="position: absolute; left: 12px; right: 12px; bottom: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(16,17,20,0.82); display: flex; flex-direction: column; gap: 2px; pointer-events: none">
+      <span style="font-size: 13px; font-weight: 700; color: #FFFFFF">{{stat}}</span>
+      <span style="font-size: 14px; line-height: 1.5; color: #E5E8EB">{{tip}}</span>
+    </div>
+  </div>
+
+  <div style="margin: 14px 16px 0; padding: 4px; border-radius: 12px; background: #24272C; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+    <sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
+      <button onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="height: 40px; border: 0; border-radius: 9px; font-size: 15px; font-weight: 700; background: {{m.bg}}; color: {{m.fg}}">{{m.name}}</button>
+    </sc-for>
+  </div>
+
+  <div style="height: 48px; margin-top: 6px; padding: 0 16px; display: flex; gap: 6px; align-items: center">
+    <sc-if value="{{isBaby}}" hint-placeholder-val="{{ false }}">
+      <sc-for list="{{ages}}" as="a" hint-placeholder-count="4">
+        <button onClick="{{a.pick}}" aria-pressed="{{a.on}}" style="height: 34px; padding: 0 11px; border-radius: 17px; font-size: 14px; font-weight: 700; border: 1px solid {{a.line}}; background: transparent; color: {{a.fg}}">{{a.name}}</button>
+      </sc-for>
+    </sc-if>
+    <span style="flex: 1"></span>
+    <button onClick="{{toggleCompare}}" aria-pressed="{{compare}}" style="height: 34px; padding: 0 12px; border-radius: 17px; display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 700; border: 1px solid {{cmpLine}}; background: {{cmpBg}}; color: {{cmpFg}}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"></rect><path d="M12 5v14"></path></svg>
+      반반 보기
+    </button>
+  </div>
+
+  <div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; padding: 0 32px 16px">
+    <a href="Denied.dc.html" aria-label="앨범에서 사진 고르기" style="justify-self: start; width: 48px; height: 48px; border-radius: 24px; background: #24272C; display: flex; align-items: center; justify-content: center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M21 16l-5-5-8 8"></path></svg>
+    </a>
+    <a href="Family.dc.html" aria-label="찍고 가족 시선 한 장 보기" style="justify-self: center; width: 76px; height: 76px; border-radius: 38px; border: 4px solid #FFFFFF; box-sizing: border-box; padding: 5px; display: block">
+      <span style="display: block; width: 100%; height: 100%; border-radius: 50%; background: #FFFFFF"></span>
+    </a>
+    <button aria-label="카메라 방향 바꾸기" style="justify-self: end; width: 48px; height: 48px; border-radius: 24px; border: 0; background: #24272C; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><path d="M9 13a3 3 0 0 1 5.2-2M15 12a3 3 0 0 1-5.2 2"></path></svg>
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: 'baby', age: 2, compare: true, split: 50 };
+  }
+  renderVals() {
+    const s = this.state;
+    const AGES = [
+      { name: '신생아', fid: 'c-b0', stat: '시력 0.03 정도 · 색은 거의 못 봐요', tip: '20~30cm 앞 얼굴의 윤곽과 명암을 알아봐요.' },
+      { name: '3개월', fid: 'c-b3', stat: '시력 0.05~0.1 정도', tip: '움직이는 걸 눈으로 따라가고, 색이 조금씩 또렷해져요.' },
+      { name: '6개월', fid: 'c-b6', stat: '시력 0.1~0.25 정도', tip: '색을 어른과 비슷하게 보고, 거리감도 생기기 시작해요.' },
+      { name: '12개월', fid: 'c-b12', stat: '시력 0.25~0.4 정도', tip: '꽤 선명하게 봐요. 어른만큼 보려면 몇 년이 더 걸려요.' }
+    ];
+    const MODES = {
+      baby: { name: '아기' },
+      dog: { name: '강아지', short: '강아지', fid: 'c-dog', stat: '시력 0.3 정도 · 파랑과 노랑 위주로 봐요', tip: '빨강과 초록은 비슷한 누런색으로 보여요. 잔디 위에선 빨간 공보다 파란 공을 더 잘 찾아요.' },
+      cat: { name: '고양이', short: '고양이', fid: 'c-cat', stat: '시력 0.15 정도 · 어두운 곳에 강해요', tip: '색은 옅게 보는 대신, 어두운 곳을 사람보다 훨씬 밝게 봐요.' }
+    };
+    const isBaby = s.mode === 'baby';
+    const cur = isBaby ? AGES[s.age] : MODES[s.mode];
+    const split = s.split;
+    return {
+      short: isBaby ? '아기 · ' + AGES[s.age].name : MODES[s.mode].short,
+      fid: cur.fid,
+      stat: cur.stat,
+      tip: cur.tip,
+      compare: s.compare,
+      split,
+      rest: 100 - split,
+      onSplit: (e) => this.setState({ split: Number(e.target.value) }),
+      isBaby,
+      cmpLine: s.compare ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
+      cmpBg: s.compare ? '#FFFFFF' : 'transparent',
+      cmpFg: s.compare ? '#191F28' : '#C9CED4',
+      toggleCompare: () => this.setState({ compare: !s.compare }),
+      modes: ['baby', 'dog', 'cat'].map((k) => ({
+        name: MODES[k].name,
+        on: k === s.mode,
+        bg: k === s.mode ? '#FFFFFF' : 'transparent',
+        fg: k === s.mode ? '#191F28' : '#C9CED4',
+        pick: () => this.setState({ mode: k })
+      })),
+      ages: AGES.map((a, i) => ({
+        name: a.name,
+        on: i === s.age,
+        line: i === s.age ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
+        fg: i === s.age ? '#FFFFFF' : '#C9CED4',
+        pick: () => this.setState({ age: i })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
