@@ -3,406 +3,498 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#121110">
+<meta name="theme-color" content="#FFFFFF">
 <title>누구의 눈 — 아이와 반려동물의 시선 카메라</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="description" content="우리 아이와 반려동물은 나를 어떻게 볼까요? 아기·강아지·고양이의 눈으로 세상을 비춰보세요.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-  :root{
-    --ink:#121110; --ink2:#1d1b18; --line:#2e2a25; --cream:#f4ecdf; --mute:#a59b8c;
-    --accent:#f2a7a0;
-  }
+  :root{--g50:#F9FAFB;--g100:#F2F4F6;--g200:#E5E8EB;--g300:#D1D6DB;--g500:#8B95A1;--g700:#4E5968;--g800:#333D4B;--g900:#191F28;
+        --blue:#2272EB;--blueBg:#E8F0FD;--blueTx:#1B5BC9;--dark:#101114;--dark2:#24272C;--darkTx:#C9CED4}
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;background:var(--ink);color:var(--cream);font-family:"Noto Sans KR",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-  .app{height:100dvh;max-width:560px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);overflow:hidden;
-       padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-  header{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px 10px}
-  .brand{font-family:"Gowun Dodum",serif;font-size:22px;letter-spacing:-.5px}
-  .brand b{color:var(--accent);font-weight:400;transition:color .3s}
-  .tag{font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:12px}
-  .panel{min-width:0}
+  html,body{background:#fff;color:var(--g900);font-family:Pretendard,"Apple SD Gothic Neo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  button,a{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-decoration:none;-webkit-tap-highlight-color:transparent}
+  .screen{display:none;flex-direction:column;min-height:100dvh;max-width:480px;margin:0 auto;
+          padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .screen.on{display:flex}
+  .dark{background:var(--dark);color:#fff}
+  body.isdark{background:var(--dark)}
 
-  .stage{position:relative;overflow:hidden;margin:0 10px;border-radius:18px;background:#0a0908}
-  .frame{position:absolute;touch-action:none}
-  #view{width:100%;height:100%;display:block;border-radius:inherit}
-  .divider{position:absolute;top:0;bottom:0;width:2px;background:var(--cream);box-shadow:0 0 0 1px rgba(0,0,0,.25);display:none;transform:translateX(-1px)}
-  .divider::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;
-       background:var(--cream);color:var(--ink);display:grid;place-items:center;font-size:15px;font-weight:800}
-  .side{position:absolute;top:10px;font-size:11px;font-weight:600;padding:4px 9px;border-radius:99px;background:rgba(18,17,16,.7);display:none;backdrop-filter:blur(6px)}
-  .side.l{left:10px}.side.r{right:10px}
-  .compare .divider,.compare .side{display:block}
-  .badge{position:absolute;left:12px;bottom:12px;font-size:12px;padding:6px 11px;border-radius:99px;background:rgba(18,17,16,.72);backdrop-filter:blur(6px)}
-  .camcta{position:absolute;inset:auto 12px 12px auto;font-size:12px;font-weight:600;padding:7px 12px;border-radius:99px;background:var(--cream);color:var(--ink)}
+  .bar{height:52px;display:flex;align-items:center;gap:8px;padding:0 12px 0 8px;flex-shrink:0}
+  .bar .t{font-size:16px;font-weight:700;flex:1}
+  .ib{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px}
+  .ib svg{width:24px;height:24px}
 
-  .panel{padding:12px 12px 14px}
-  .modes{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}
-  .modes::-webkit-scrollbar{display:none}
-  .mode{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:14px;background:var(--ink2);border:1px solid var(--line);font-size:14px;font-weight:600;transition:all .2s}
-  .mode .e{font-size:17px}
-  .mode[aria-pressed=true]{background:var(--cream);color:var(--ink);border-color:var(--cream)}
-  .ages{display:none;gap:4px;overflow-x:auto;scrollbar-width:none;margin-top:8px;padding:2px}
-  .ages::-webkit-scrollbar{display:none}
-  .ages.on{display:flex}
-  .age{flex:0 0 auto;font-size:12px;padding:6px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
-  .age[aria-pressed=true]{border-color:var(--accent);color:var(--accent);font-weight:600}
+  /* 홈 */
+  .hero{padding:16px 24px 20px}
+  .hero h1{font-size:24px;line-height:1.4;font-weight:800;letter-spacing:-.4px}
+  .hero p{margin-top:8px;font-size:16px;line-height:1.55;color:var(--g700)}
+  .row{display:flex;align-items:center;gap:16px;padding:14px 24px;width:100%;text-align:left}
+  .row:active{background:var(--g50)}
+  .row .ic{width:40px;height:40px;border-radius:12px;background:var(--g100);color:var(--g700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .row .ic svg{width:24px;height:24px}
+  .row .tx{flex:1;display:flex;flex-direction:column;gap:2px}
+  .row b{font-size:17px}
+  .row span.s{font-size:14px;color:var(--g700)}
+  .gap{height:12px;background:var(--g100);margin-top:12px}
+  .note{padding:20px 24px}
+  .note b{display:block;font-size:17px}
+  .note p{margin-top:6px;font-size:14px;line-height:1.6;color:var(--g700)}
+  .fine{margin:0 24px 12px;font-size:13px;line-height:1.55;color:var(--g700);text-align:center}
+  .cta{padding:0 20px 24px;display:flex;flex-direction:column;gap:8px}
+  .btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:16px;font-size:17px;font-weight:700;width:100%}
+  .btn.pri{background:var(--blue);color:#fff}
+  .btn.sec{background:var(--blueBg);color:var(--blueTx)}
+  .btn.drk{background:var(--dark2);color:#fff}
+  .btn:active{filter:brightness(.94)}
+  .spacer{flex:1}
 
-  .controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin-top:12px}
-  .ctl{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--mute)}
-  .ctl .ic{width:44px;height:44px;border-radius:50%;background:var(--ink2);border:1px solid var(--line);display:grid;place-items:center;font-size:18px;color:var(--cream)}
-  .ctl[aria-pressed=true] .ic{border-color:var(--accent);color:var(--accent)}
-  .left{display:flex;gap:14px;justify-self:start;padding-left:6px}
-  .right{display:flex;gap:14px;justify-self:end;padding-right:6px}
-  .shutter{width:68px;height:68px;border-radius:50%;border:3px solid var(--cream);display:grid;place-items:center}
-  .shutter span{width:54px;height:54px;border-radius:50%;background:var(--accent);transition:transform .1s,background .3s}
-  .shutter:active span{transform:scale(.9)}
+  /* 카메라 */
+  .vf{position:relative;margin:4px 12px 0;flex:1;min-height:300px;border-radius:20px;overflow:hidden;background:#22252A}
+  #view{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .split{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;display:none}
+  .lbl{position:absolute;top:12px;padding:5px 10px;border-radius:10px;background:rgba(16,17,20,.75);font-size:13px;font-weight:700;display:none}
+  .lbl.l{left:12px}.lbl.r{right:12px}
+  .vf.cmp .split,.vf.cmp .lbl{display:block}
+  .tip{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 14px;border-radius:12px;background:rgba(16,17,20,.8);font-size:14px;line-height:1.5}
+  .seg{margin:14px 16px 0;padding:4px;border-radius:12px;background:var(--dark2);display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  .seg button{height:40px;border-radius:9px;font-size:15px;font-weight:700;color:var(--darkTx)}
+  .seg button[aria-pressed=true]{background:#fff;color:var(--g900)}
+  .sub{height:48px;margin-top:6px;padding:0 16px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none}
+  .sub::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;height:34px;padding:0 12px;border-radius:17px;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,.3);color:var(--darkTx)}
+  .chip[aria-pressed=true]{border-color:#fff;color:#fff}
+  .shoot{display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:8px 32px 18px}
+  .rb{width:48px;height:48px;border-radius:24px;background:var(--dark2);display:flex;align-items:center;justify-content:center;color:#fff}
+  .rb svg{width:24px;height:24px}
+  .shutter{justify-self:center;width:76px;height:76px;border-radius:38px;border:4px solid #fff;padding:5px}
+  .shutter span{display:block;width:100%;height:100%;border-radius:50%;background:#fff;transition:transform .1s}
+  .shutter:active span{transform:scale(.88)}
 
-  details{margin-top:12px;background:var(--ink2);border:1px solid var(--line);border-radius:14px}
-  summary{list-style:none;padding:12px 14px;font-size:14px;font-weight:600;display:flex;justify-content:space-between;cursor:pointer}
-  summary::-webkit-details-marker{display:none}
-  summary::after{content:"＋";color:var(--mute)}
-  details[open] summary::after{content:"－"}
-  .info{padding:0 14px 14px;font-size:13px;line-height:1.65;color:#d9cfbf}
-  .info h4{font-size:12px;color:var(--mute);font-weight:600;margin:10px 0 4px}
-  .info ul{padding-left:16px}
-  .info .stat{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 2px}
-  .info .stat span{font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--cream)}
-  .slider{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:var(--mute)}
-  .slider input{flex:1;accent-color:var(--accent)}
-  .src{font-size:11px;color:#7d7466;margin-top:10px;line-height:1.5}
+  /* 권한 */
+  .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 32px;text-align:center}
+  .center .big{width:64px;height:64px;border-radius:20px;background:var(--dark2);display:flex;align-items:center;justify-content:center}
+  .center h1{font-size:22px;line-height:1.4;font-weight:800}
+  .center p{font-size:15px;line-height:1.6;color:var(--darkTx)}
 
-  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;max-width:88%;background:var(--cream);color:var(--ink);
-         font-size:13px;line-height:1.5;padding:10px 14px;border-radius:12px;transition:all .3s;pointer-events:none;z-index:20}
+  /* 결과 */
+  .rhead{padding:8px 24px 16px}
+  .rhead h1{font-size:22px;line-height:1.4;font-weight:800}
+  .rhead p{margin-top:6px;font-size:15px;line-height:1.55;color:var(--g700)}
+  .card{margin:0 20px;border-radius:20px;overflow:hidden;background:var(--g100)}
+  .card img{display:block;width:100%}
+  .lbl2{padding:20px 24px 10px;font-size:15px;font-weight:700}
+  .chips{padding:0 20px;display:flex;gap:8px;flex-wrap:wrap}
+  .mchip{height:40px;padding:0 14px;border-radius:20px;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;border:1px solid var(--g300);color:var(--g700);background:#fff}
+  .mchip[aria-pressed=true]{background:var(--g900);border-color:var(--g900);color:#fff}
+  .mchip svg{width:16px;height:16px;display:none}
+  .mchip[aria-pressed=true] svg{display:block}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;width:calc(100% - 40px);max-width:440px;
+         padding:12px 16px;border-radius:14px;background:var(--g900);color:#fff;font-size:14px;font-weight:500;transition:all .25s;pointer-events:none;z-index:30}
   .toast.on{opacity:1;transform:translate(-50%,0)}
-  .sheet{position:fixed;inset:0;background:rgba(10,9,8,.92);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;z-index:10}
-  .sheet.on{display:flex}
-  .sheet img{max-width:100%;max-height:72vh;border-radius:12px}
-  .sheet p{font-size:12px;color:var(--mute)}
-  .sheet .row{display:flex;gap:10px}
-  .btn{padding:10px 18px;border-radius:99px;border:1px solid var(--line);font-size:14px;font-weight:600}
-  .btn.pri{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+
+  /* 바텀시트 */
+  .sheet{position:fixed;inset:0;z-index:20;display:none}
+  .sheet.on{display:block}
+  .sheet .dim{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+  .sheet .pn{position:absolute;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;max-height:88dvh;overflow:auto;background:#fff;color:var(--g900);
+             border-radius:24px 24px 0 0;padding:10px 24px calc(24px + env(safe-area-inset-bottom))}
+  .handle{width:40px;height:4px;border-radius:2px;background:var(--g300);margin:0 auto}
+  .pn h2{margin-top:22px;font-size:22px;font-weight:800}
+  .kv{margin-top:14px}
+  .kv div{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100);font-size:15px}
+  .kv div:last-child{border-bottom:0}
+  .kv span{color:var(--g700)} .kv b{text-align:right}
+  .strip{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+  .strip .r{display:flex;align-items:center;gap:10px}
+  .strip .r span{width:48px;font-size:13px;color:var(--g700)}
+  .strip .r .c{flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+  .strip .r .c i{height:28px;border-radius:8px}
+  .pn .desc{margin-top:14px;font-size:15px;line-height:1.65;color:var(--g800)}
+  .box{margin-top:16px;padding:14px 16px;border-radius:14px;background:var(--g100)}
+  .box b{display:block;font-size:14px}
+  .box p{margin-top:4px;font-size:14px;line-height:1.6;color:var(--g700)}
+  .src{margin:16px 0 12px;font-size:12px;line-height:1.55;color:var(--g700)}
 </style>
 </head>
 <body>
-<div class="app">
-  <header>
-    <div class="brand" id="brand">누구의 <b>눈</b></div>
-    <div class="tag">아이와 반려동물이 보는 세상</div>
-  </header>
 
-  <div class="stage" id="stage">
-    <div class="frame" id="frame">
-      <canvas id="view"></canvas>
-      <div class="divider" id="divider"></div>
-      <div class="side l">🧑 사람</div>
-      <div class="side r" id="sideR">강아지</div>
-    </div>
-    <div class="badge" id="badge">예시 장면</div>
-    <button class="camcta" id="camCta">📷 카메라 켜기</button>
+<!-- 1. 시작 -->
+<section class="screen on" id="s-home">
+  <div class="bar" style="padding-left:24px"><span class="t">누구의 눈</span></div>
+  <div class="hero">
+    <h1>우리 아이와 반려동물은<br>나를 어떻게 볼까요?</h1>
+    <p>보고 싶은 눈을 고르고 카메라를 비춰보세요</p>
   </div>
+  <div id="homeList"></div>
+  <div class="gap"></div>
+  <div class="note">
+    <b>사진을 찍으면 가족 시선 한 장이 만들어져요</b>
+    <p>내 사진 하나를 아기·강아지·고양이의 눈으로 나눠 보여드려요. 가족에게 바로 보낼 수 있어요.</p>
+  </div>
+  <div class="spacer"></div>
+  <p class="fine">연구 자료로 만든 재미용 근사치예요.<br>눈 건강이 궁금하면 안과에서 확인해 주세요.</p>
+  <div class="cta"><button class="btn pri" id="startBtn">카메라 켜기</button></div>
+</section>
 
-  <div class="panel">
-    <div class="modes" id="modes"></div>
-    <div class="ages" id="ages"></div>
+<!-- 2. 카메라 -->
+<section class="screen dark" id="s-cam">
+  <div class="bar">
+    <button class="ib" data-back aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <span class="t"></span>
+    <button class="ib" id="infoBtn" aria-label="이 눈에 대해 알아보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
+  </div>
+  <div class="vf" id="vf">
+    <canvas id="view"></canvas>
+    <div class="split"></div>
+    <span class="lbl l">사람</span><span class="lbl r" id="lblR">강아지</span>
+    <div class="tip" id="tip"></div>
+  </div>
+  <div class="seg" id="seg"></div>
+  <div class="sub" id="sub"></div>
+  <div class="shoot">
+    <label class="rb" style="justify-self:start" aria-label="앨범에서 사진 고르기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>
+      <input type="file" accept="image/*" class="fileIn" hidden>
+    </label>
+    <button class="shutter" id="shutter" aria-label="찍고 가족 시선 한 장 보기"><span></span></button>
+    <button class="rb" style="justify-self:end" id="flipBtn" aria-label="카메라 방향 바꾸기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><path d="M9 13a3 3 0 0 1 5.2-2M15 12a3 3 0 0 1-5.2 2"/></svg>
+    </button>
+  </div>
+</section>
 
-    <div class="controls">
-      <div class="left">
-        <label class="ctl"><span class="ic">🖼</span>사진<input type="file" accept="image/*" id="file" hidden></label>
-        <button class="ctl" id="cmpBtn" aria-pressed="false"><span class="ic">◐</span>비교</button>
-      </div>
-      <button class="shutter" id="shutter" aria-label="촬영"><span></span></button>
-      <div class="right">
-        <button class="ctl" id="flipBtn"><span class="ic">⟲</span>전환</button>
-      </div>
-    </div>
+<!-- 5. 권한 없음 -->
+<section class="screen dark" id="s-denied">
+  <div class="bar">
+    <button class="ib" data-back aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+  </div>
+  <div class="center">
+    <span class="big"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+    <h1>카메라를 허용하면<br>바로 시작할 수 있어요</h1>
+    <p id="deniedMsg">비춘 화면은 휴대폰 안에서만 바꿔 보여드려요. 사진은 저장하기를 눌렀을 때만 남아요.</p>
+  </div>
+  <div class="cta">
+    <button class="btn pri" id="retryBtn">카메라 허용하기</button>
+    <label class="btn drk">앨범에서 사진 고르기<input type="file" accept="image/*" class="fileIn" hidden></label>
+  </div>
+</section>
 
-    <details id="det">
-      <summary id="infoTitle">이 눈에 대해</summary>
-      <div class="info" id="info"></div>
-      <div class="info">
-        <div class="slider"><span>화면 보정</span><input type="range" id="boost" min="1" max="8" step="0.5" value="4"><b id="boostV">×4</b></div>
-        <div class="src">작은 휴대폰 화면에서는 흐림이 실제보다 덜 느껴져요. '화면 보정'은 눈앞의 장면을 실제 크기로 보는 느낌에 가깝게 흐림을 키운 값이에요. ×1이 수치 그대로의 계산값입니다.<br><br>
-        근거: Caves et al. 2018(동물 시력 비교), Neumeyer 2003(금붕어), Lind &amp; Kelber 2011·Chaib et al. 2021(사랑앵무), 영아 시력 발달 기준(Preferential Looking). 색 변환은 Machado 2009 색각 모델. 모두 근사치예요.</div>
-      </div>
-    </details>
+<!-- 3. 결과 -->
+<section class="screen" id="s-result">
+  <div class="bar">
+    <button class="ib" data-back aria-label="다시 찍기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <span class="t">누구의 눈</span>
+  </div>
+  <div class="rhead">
+    <h1>우리 가족은 나를 이렇게 봐요</h1>
+    <p id="hint"></p>
+  </div>
+  <div class="card"><img id="cardImg" alt="가족 시선 한 장"></div>
+  <div class="lbl2">카드에 넣을 눈을 골라주세요</div>
+  <div class="chips" id="mchips"></div>
+  <div class="spacer" style="min-height:24px"></div>
+  <div class="cta two">
+    <button class="btn sec" id="saveBtn">앨범에 저장하기</button>
+    <button class="btn pri" id="shareBtn">가족에게 보내기</button>
+  </div>
+</section>
+
+<!-- 4. 시선 설명 -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="dim" data-close></div>
+  <div class="pn">
+    <div class="handle"></div>
+    <h2 id="shTitle"></h2>
+    <div class="kv" id="shKv"></div>
+    <div class="strip" id="shStrip"></div>
+    <p class="desc" id="shDesc"></p>
+    <div class="box"><b>카메라에 담기 어려운 것도 있어요</b><p id="shCant"></p></div>
+    <p class="src" id="shSrc"></p>
+    <button class="btn pri" data-close>닫기</button>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-<div class="sheet" id="sheet">
-  <img id="shot" alt="촬영한 사진">
-  <p>이미지를 길게 누르면 휴대폰에 저장할 수 있어요</p>
-  <div class="row"><button class="btn pri" id="saveBtn">저장</button><button class="btn" id="closeBtn">닫기</button></div>
-</div>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
 (() => {
 const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 
-/* ---------- 데이터: 모드와 근거 ---------- */
-const AGES = [
-  {k:'nb', label:'신생아', cpd:1.0, sat:.10, tri:1, con:.45, vig:.22,
-   desc:'시력은 대략 20/400~20/800 수준이에요. 20~30cm 거리의 얼굴 윤곽과 밝고 어두운 대비 정도를 알아봐요. 색은 거의 구분하지 못하고, 시야도 좌우 30° 안팎으로 좁아요.',
-   stat:['약 1 cpd','시야 ~30°','색 거의 없음']},
-  {k:'m1', label:'1개월', cpd:1.3, sat:.2, tri:1, con:.55, vig:.3,
-   desc:'여전히 아주 흐리고 대비가 낮아요. 빨강처럼 강한 색부터 조금씩 느끼기 시작해요.',
-   stat:['약 1.3 cpd','대비 낮음']},
-  {k:'m2', label:'2개월', cpd:1.8, sat:.4, tri:.9, con:.62, vig:.4,
-   desc:'빨강·초록 구분이 생기기 시작해요. 파랑-노랑 계열은 아직 약해서 색이 한쪽으로 치우쳐 보여요.',
-   stat:['약 1.8 cpd','빨강·초록 구분 시작']},
-  {k:'m3', label:'3개월', cpd:2.5, sat:.6, tri:.6, con:.7, vig:.55,
-   desc:'시력은 대략 20/200~20/400. 움직이는 물체를 눈으로 따라가고, 색이 점점 또렷해져요.',
-   stat:['약 2.5 cpd','눈으로 따라가기']},
-  {k:'m6', label:'6개월', cpd:5, sat:.85, tri:.25, con:.82, vig:.78,
-   desc:'시력은 대략 20/80~20/200. 색 지각은 어른과 비슷해지고, 두 눈으로 거리감을 느끼기 시작해요.',
-   stat:['약 5 cpd','색 거의 어른 수준']},
-  {k:'m9', label:'9개월', cpd:7, sat:.95, tri:.08, con:.9, vig:1.1,
-   desc:'시력은 대략 20/50~20/100. 기어다니면서 멀리 있는 물건도 알아봐요.',
-   stat:['약 7 cpd']},
-  {k:'m12', label:'12개월', cpd:9, sat:1, tri:0, con:.94, vig:9,
-   desc:'시력은 대략 20/50~20/80. 꽤 선명해졌지만 아직 어른만큼은 아니에요. 어른 수준은 대략 3~5살쯤 돼요.',
-   stat:['약 9 cpd']},
-  {k:'y3', label:'3살', cpd:19, sat:1, tri:0, con:1, vig:9,
-   desc:'약 19 cpd로 어른(약 30 cpd)에 많이 가까워졌어요.',
-   stat:['약 19 cpd']}
-];
-
-const MODES = {
-  human:{name:'사람', who:'사람', e:'🧑', color:'#e8e2d6', p:{cpd:30,cvd:0,tri:0,sat:1,con:1,gam:1,gain:1,vig:9,fish:0},
-    desc:'필터 없는 원본이에요. 다른 눈과 비교하는 기준으로 쓰세요.', stat:['약 30 cpd (20/20)'], cant:''},
-  baby:{name:'아기', who:'아기', e:'👶', color:'#f2a7a0',
-    cant:'아기는 20~30cm 거리에 초점이 가장 잘 맞지만, 카메라는 거리를 몰라서 \'거리에 따른 흐림\'은 재현하지 못해요. 개월 수 수치는 평균적인 발달 범위이고, 아이마다 차이가 커요.'},
-  dog:{name:'강아지', who:'강아지', e:'🐶', color:'#e9b949', p:{cpd:8,cvd:1,tri:0,sat:1,con:.85,gam:.88,gain:1.08,vig:9,fish:0},
-    desc:'색을 느끼는 원뿔세포가 두 종류(파랑·노랑 계열)예요. 빨강·주황·초록이 비슷한 누런 톤으로 보여서, 잔디 위 빨간 공은 잘 안 보이고 파란 공은 잘 보여요. 시력은 대략 20/75. 대신 어둠과 움직임에는 사람보다 강해요.',
-    stat:['2색형','약 20/75','어둠·움직임에 강함'],
-    cant:'강아지의 넓은 시야(약 240° 안팎)는 휴대폰 카메라 화각을 넘어서 표현하지 못해요.'},
-  cat:{name:'고양이', who:'고양이', e:'🐱', color:'#9cc5a1', p:{cpd:8.6,cvd:1,tri:0,sat:.6,con:.8,gam:.75,gain:1.15,vig:9,fish:0},
-    desc:'강아지처럼 2색형에 가깝고, 색감은 더 옅은 편이에요. 선명도는 사람의 대략 1/7. 대신 어두운 곳에 아주 강해서 사람보다 훨씬 적은 빛으로도 볼 수 있어요.',
-    stat:['2색형(옅음)','사람의 ~1/7 선명도','밤눈 밝음'],
-    cant:'고양이는 아주 가까운 물체(약 25cm 이내)에 초점을 잘 못 맞춘다고 알려져 있지만, 카메라가 거리를 몰라 재현하지 않았어요.'},
-  fish:{name:'금붕어', who:'금붕어', e:'🐟', color:'#f08a4b', p:{cpd:2,cvd:0,tri:0,sat:1.4,con:1.05,gam:1,gain:1,vig:.84,vigSoft:.14,vigCol:[.03,.07,.1],fish:.38},
-    desc:'원뿔세포가 네 종류(자외선 포함)라 사람보다 색을 더 잘게 나눠 봐요. 하지만 선명도는 최대 약 2 cpd로 사람의 수십 분의 1이에요. 눈이 머리 양옆에 있어 시야가 아주 넓어요.',
-    stat:['4색형(자외선)','최대 ~2 cpd','넓은 시야'],
-    cant:'휴대폰 카메라엔 자외선 차단 필터가 있어 자외선 색은 담을 수 없어요. 여기선 \'색이 더 풍부하다\'는 느낌만 채도로 표현했어요.'},
-  parrot:{name:'앵무새', who:'앵무새', e:'🦜', color:'#6fb3e0', p:{cpd:9,cvd:0,tri:0,sat:1.3,con:1.05,gam:1,gain:1,vig:9,fish:.12},
-    desc:'사랑앵무 기준이에요. 자외선을 포함한 4색 시각이라, 앵무새 깃털엔 사람 눈에 안 보이는 자외선 무늬가 있어요. 선명도는 약 8~10 cpd. 새들은 깜빡임을 사람보다 훨씬 빠르게 감지해요.',
-    stat:['4색형(자외선)','약 8~10 cpd','빠른 깜빡임 감지'],
-    cant:'자외선 무늬와 깜빡임 감지는 화면으로 재현할 수 없어요. 채도와 약한 광각 왜곡으로 분위기만 표현했어요.'}
+/* ---------- 데이터 ---------- */
+const ICON = {
+  baby:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 5c0-1.6 1.6-2.4 2.6-1.4"/><path d="M9.5 15.5c1.4 1.2 3.6 1.2 5 0"/><circle cx="9.5" cy="12" r=".7" fill="currentColor"/><circle cx="14.5" cy="12" r=".7" fill="currentColor"/></svg>',
+  dog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8c-2-1-4 1-4 4s1 4 2.5 3.5"/><path d="M17 8c2-1 4 1 4 4s-1 4-2.5 3.5"/><path d="M7 8.5C7.5 6 9.5 5 12 5s4.5 1 5 3.5l.5 5.5c0 3-2.5 5-5.5 5s-5.5-2-5.5-5z"/><circle cx="10" cy="11.5" r=".7" fill="currentColor"/><circle cx="14" cy="11.5" r=".7" fill="currentColor"/><path d="M11 15h2l-1 1z"/></svg>',
+  cat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l3 4h8l3-4v9c0 4-3 7-7 7s-7-3-7-7z"/><circle cx="9.5" cy="12" r=".7" fill="currentColor"/><circle cx="14.5" cy="12" r=".7" fill="currentColor"/><path d="M11 15h2l-1 1z"/></svg>'
 };
-const ORDER = ['baby','dog','cat','fish','parrot','human'];
+const CHEV='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B95A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
 
-const state = { mode:'dog', age:0, compare:false, split:.5, boost:4, facing:'environment', mirror:false,
-                source:null, srcW:0, srcH:0, isVideo:false, dirty:true, stream:null };
+const HUMAN = {cpd:30,cvd:0,tri:0,sat:1,con:1,gam:1,gain:1,vig:9};
+const AGES = [
+  {name:'신생아', p:{cpd:1.0,cvd:0,tri:1,sat:.10,con:.45,gam:1,gain:1,vig:.22},
+   tip:'신생아는 20~30cm 앞 얼굴의 윤곽과 명암을 알아봐요. 색은 아직 거의 구분하지 못해요.',
+   kv:[['시력','약 20/400~20/800'],['색','밝고 어두운 차이 위주'],['잘 보이는 거리','20~30cm']],
+   desc:'눈앞 얼굴의 윤곽과 밝고 어두운 대비를 먼저 알아봐요. 시야도 좌우 30° 안팎으로 좁아요.'},
+  {name:'3개월', p:{cpd:2.5,cvd:0,tri:.6,sat:.6,con:.7,gam:1,gain:1,vig:.55},
+   tip:'3개월쯤엔 움직이는 걸 눈으로 따라가고, 색이 조금씩 또렷해져요.',
+   kv:[['시력','약 20/200~20/400'],['색','점점 또렷해져요'],['새로 생긴 능력','움직임 따라보기']],
+   desc:'빨강·초록부터 구분하기 시작하고, 파랑·노랑 계열은 조금 더 늦게 또렷해져요.'},
+  {name:'6개월', p:{cpd:5,cvd:0,tri:.25,sat:.85,con:.82,gam:1,gain:1,vig:.78},
+   tip:'6개월쯤엔 색을 어른과 비슷하게 보고, 거리감도 생기기 시작해요.',
+   kv:[['시력','약 20/80~20/200'],['색','어른과 비슷해요'],['새로 생긴 능력','거리감']],
+   desc:'두 눈을 함께 쓰면서 무엇이 가깝고 먼지 느끼기 시작해요.'},
+  {name:'12개월', p:{cpd:9,cvd:0,tri:0,sat:1,con:.94,gam:1,gain:1,vig:9},
+   tip:'돌 무렵엔 꽤 선명하게 봐요. 어른만큼 보려면 몇 년이 더 걸려요.',
+   kv:[['시력','약 20/50~20/80'],['색','어른과 비슷해요'],['어른만큼 보는 시기','3~5살쯤']],
+   desc:'기어다니며 멀리 있는 물건도 알아봐요. 선명도는 몇 년에 걸쳐 계속 좋아져요.'}
+];
+const MODES = {
+  baby:{name:'아기', sub:'신생아부터 3살까지 자라는 시력을 봐요',
+        cant:'아기는 20~30cm 거리에 초점이 가장 잘 맞아요. 카메라는 거리를 알 수 없어서 거리마다 다른 흐림은 담지 못해요.',
+        src:'참고: 영아 시력 발달 기준(선호주시법 측정값). 아이마다 차이가 커요.'},
+  dog:{name:'강아지', sub:'빨강과 초록이 비슷한 색으로 보여요', p:{cpd:8,cvd:1,tri:0,sat:1,con:.85,gam:.88,gain:1.08,vig:9},
+       tip:'강아지는 빨강과 초록을 비슷한 누런색으로 봐요. 잔디 위 빨간 공보다 파란 공을 더 잘 찾는 이유예요.',
+       kv:[['구분하는 색','파랑·노랑 두 계열'],['선명도','사람의 약 4분의 1'],['사람보다 잘 보는 것','어두운 곳, 움직임']],
+       desc:'빨강·주황·초록이 비슷한 누런색으로 보여요. 잔디밭에서 공을 던져줄 땐 파란 공이 잘 보여요.',
+       cant:'강아지의 시야는 휴대폰 카메라보다 훨씬 넓어요.',
+       src:'참고: Caves 외(2018) 동물 시력 비교, Machado 외(2009) 색각 모델. 재미로 보는 근사치예요.'},
+  cat:{name:'고양이', sub:'색은 옅게, 어두운 곳은 밝게 봐요', p:{cpd:8.6,cvd:1,tri:0,sat:.6,con:.8,gam:.75,gain:1.15,vig:9},
+       tip:'고양이는 색을 옅게 보는 대신, 어두운 곳을 사람보다 훨씬 밝게 봐요.',
+       kv:[['구분하는 색','강아지와 비슷, 더 옅게'],['선명도','사람의 약 7분의 1'],['사람보다 잘 보는 것','어두운 곳']],
+       desc:'색은 옅게 보지만 아주 적은 빛으로도 볼 수 있어요. 밤에 눈이 빛나는 것도 빛을 한 번 더 모으는 구조 덕분이에요.',
+       cant:'고양이는 아주 가까운 물체에 초점을 잘 맞추지 못한다고 알려져 있어요. 카메라는 거리를 알 수 없어서 담지 못해요.',
+       src:'참고: Caves 외(2018) 동물 시력 비교, Machado 외(2009) 색각 모델. 재미로 보는 근사치예요.'}
+};
+const ORDER=['baby','dog','cat'];
+const state = { mode:'dog', age:2, compare:true, facing:'environment', stream:null,
+                src:null, srcW:0, srcH:0, isVideo:false, mirror:false, dirty:true,
+                still:null, members:{baby:true,dog:true,cat:true}, cardURL:'' };
+const P = () => state.mode==='baby' ? AGES[state.age].p : MODES[state.mode].p;
+const modeLabel = (k=state.mode) => k==='baby' ? `아기 · ${AGES[state.age].name}` : MODES[k].name;
 
-function params(){
-  if(state.mode==='baby'){ const a=AGES[state.age]; return {cpd:a.cpd,cvd:0,tri:a.tri,sat:a.sat,con:a.con,gam:1,gain:1,vig:a.vig,vigSoft:.35,vigCol:[.45,.43,.4],vigAmt:.8,fish:0}; }
-  return Object.assign({vigSoft:.35,vigCol:[0,0,0],vigAmt:1}, MODES[state.mode].p);
+/* ---------- 화면 전환 ---------- */
+let current='home';
+function show(id){
+  $$('.screen').forEach(s=>s.classList.toggle('on', s.id==='s-'+id));
+  current=id; document.body.classList.toggle('isdark', id==='cam'||id==='denied');
+  document.querySelector('meta[name=theme-color]').content = (id==='cam'||id==='denied') ? '#101114' : '#FFFFFF';
+  if(id!=='cam') stopCam();
+  window.scrollTo(0,0); state.dirty=true;
 }
+function go(id){ history.pushState({s:id},'' ); show(id); }
+addEventListener('popstate', e=>{ closeSheet(); show(e.state?.s || 'home'); });
+history.replaceState({s:'home'},'');
+$$('[data-back]').forEach(b=>b.onclick=()=>history.back());
 
-/* ---------- UI ---------- */
-const modesEl=$('#modes'), agesEl=$('#ages');
-ORDER.forEach(k=>{ const m=MODES[k]; const b=document.createElement('button'); b.className='mode'; b.dataset.k=k;
-  b.innerHTML=`<span class="e">${m.e}</span>${m.name}`; b.onclick=()=>{state.mode=k;refreshUI();}; modesEl.appendChild(b); });
-AGES.forEach((a,i)=>{ const b=document.createElement('button'); b.className='age'; b.textContent=a.label; b.onclick=()=>{state.age=i;refreshUI();}; agesEl.appendChild(b); });
+let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),3200); }
 
-function refreshUI(){
-  const m=MODES[state.mode];
-  document.documentElement.style.setProperty('--accent', m.color);
-  [...modesEl.children].forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===state.mode));
-  agesEl.classList.toggle('on', state.mode==='baby');
-  [...agesEl.children].forEach((b,i)=>b.setAttribute('aria-pressed', i===state.age));
-  const label = state.mode==='baby' ? `아기(${AGES[state.age].label})` : m.who;
-  $('#brand').innerHTML = state.mode==='human' ? '누구의 <b>눈</b>' : `<b>${m.who}</b>의 눈`;
-  $('#sideR').textContent = `${m.e} ${label}`;
-  $('#infoTitle').textContent = `${m.e} ${label}의 눈에 대해`;
-  const d = state.mode==='baby' ? AGES[state.age] : m;
-  $('#info').innerHTML = `<div class="stat">${(d.stat||[]).map(s=>`<span>${s}</span>`).join('')}</div>
-     <p>${d.desc}</p>${m.cant?`<h4>이 화면이 보여주지 못하는 것</h4><p>${m.cant}</p>`:''}`;
+/* ---------- 홈 ---------- */
+$('#homeList').innerHTML = ORDER.map(k=>`<button class="row" data-mode="${k}"><span class="ic">${ICON[k]}</span><span class="tx"><b>${MODES[k].name}의 눈</b><span class="s">${MODES[k].sub}</span></span>${CHEV}</button>`).join('');
+$$('#homeList .row').forEach(b=>b.onclick=()=>{ state.mode=b.dataset.mode; refreshCam(); startCam(); });
+$('#startBtn').onclick=()=>{ refreshCam(); startCam(); };
+
+/* ---------- 카메라 UI ---------- */
+$('#seg').innerHTML = ORDER.map(k=>`<button data-k="${k}">${MODES[k].name}</button>`).join('');
+$$('#seg button').forEach(b=>b.onclick=()=>{ state.mode=b.dataset.k; refreshCam(); });
+function refreshCam(){
+  $$('#seg button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===state.mode));
+  const baby = state.mode==='baby';
+  $('#sub').innerHTML = baby
+    ? AGES.map((a,i)=>`<button class="chip" data-a="${i}" aria-pressed="${i===state.age}">${a.name}</button>`).join('')
+    : `<button class="chip" id="cmpChip" aria-pressed="${state.compare}">사람 눈과 반반 보기</button>`;
+  if(baby) $$('#sub .chip').forEach(c=>c.onclick=()=>{ state.age=+c.dataset.a; refreshCam(); });
+  else $('#cmpChip').onclick=()=>{ state.compare=!state.compare; refreshCam(); };
+  $('#vf').classList.toggle('cmp', !baby && state.compare);
+  $('#lblR').textContent = MODES[state.mode].name;
+  $('#tip').textContent = baby ? AGES[state.age].tip : MODES[state.mode].tip;
   state.dirty=true;
 }
 
-$('#cmpBtn').onclick=()=>{ state.compare=!state.compare; $('#cmpBtn').setAttribute('aria-pressed',state.compare); $('#frame').classList.toggle('compare',state.compare); placeDivider(); state.dirty=true; };
-$('#boost').oninput=e=>{ state.boost=+e.target.value; $('#boostV').textContent='×'+state.boost; state.dirty=true; };
-
-let toastT; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),4200); }
-
-/* ---------- 기본 예시 장면 ---------- */
-function demoScene(){
-  const c=document.createElement('canvas'); c.width=960; c.height=1200; const g=c.getContext('2d');
-  let gr=g.createLinearGradient(0,0,0,700); gr.addColorStop(0,'#7fb8ec'); gr.addColorStop(1,'#cfe6f5'); g.fillStyle=gr; g.fillRect(0,0,960,700);
-  g.fillStyle='#ffd257'; g.beginPath(); g.arc(800,150,70,0,7); g.fill();
-  g.fillStyle='#e8a3b4'; [[120,520,90],[260,560,70]].forEach(([x,y,r])=>{g.beginPath();g.arc(x,y,r,0,7);g.fill();});
-  gr=g.createLinearGradient(0,640,0,1200); gr.addColorStop(0,'#5fa84a'); gr.addColorStop(1,'#3d7d32'); g.fillStyle=gr; g.fillRect(0,640,960,560);
-  g.strokeStyle='rgba(30,70,20,.35)'; g.lineWidth=3; for(let i=0;i<500;i++){const x=Math.random()*960,y=650+Math.random()*550; g.beginPath(); g.moveTo(x,y); g.lineTo(x+(Math.random()*8-4),y-14-Math.random()*16); g.stroke();}
-  // 얼굴
-  g.fillStyle='#f2c9a6'; g.beginPath(); g.ellipse(480,380,150,180,0,0,7); g.fill();
-  g.fillStyle='#3a2a20'; g.beginPath(); g.ellipse(480,250,160,90,0,Math.PI,0); g.fill();
-  g.fillStyle='#222'; [[425,380],[535,380]].forEach(([x,y])=>{g.beginPath();g.arc(x,y,16,0,7);g.fill();});
-  g.strokeStyle='#b0503c'; g.lineWidth=10; g.lineCap='round'; g.beginPath(); g.arc(480,440,55,.2*Math.PI,.8*Math.PI); g.stroke();
-  g.fillStyle='#e05a5a'; g.fillRect(330,540,300,120);
-  // 장난감
-  const ball=(x,y,r,col)=>{ g.fillStyle=col; g.beginPath(); g.arc(x,y,r,0,7); g.fill(); g.fillStyle='rgba(255,255,255,.35)'; g.beginPath(); g.arc(x-r*.35,y-r*.35,r*.3,0,7); g.fill(); };
-  ball(200,900,85,'#d8262c'); ball(500,1000,85,'#2a5fd8'); ball(790,880,85,'#f2d02a');
-  g.fillStyle='#ff8a1e'; g.fillRect(640,1040,220,60);
-  g.font='600 30px "Noto Sans KR",sans-serif'; g.fillStyle='#fff'; g.textAlign='center';
-  g.fillText('빨간 공',200,1020); g.fillText('파란 공',500,1120); g.fillText('노란 공',790,1000); g.fillText('주황 장난감',750,1150);
-  return c;
-}
-function useSource(el,w,h,isVideo,label){ state.source=el; state.srcW=w; state.srcH=h; state.isVideo=isVideo; state.dirty=true; $('#badge').textContent=label; layout(); }
-
 /* ---------- 카메라 / 사진 ---------- */
-const video=document.createElement('video'); video.playsInline=true; video.muted=true; video.setAttribute('playsinline','');
+const video=document.createElement('video'); video.playsInline=true; video.muted=true; video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
+function stopCam(){ if(state.stream){ state.stream.getTracks().forEach(t=>t.stop()); state.stream=null; } }
+function setSource(el,w,h,isVideo,mirror){ state.src=el; state.srcW=w; state.srcH=h; state.isVideo=isVideo; state.mirror=mirror; state.dirty=true; }
 async function startCam(){
+  if(current!=='cam') go('cam');
   try{
-    if(!navigator.mediaDevices?.getUserMedia) throw new Error('nocam');
-    if(state.stream) state.stream.getTracks().forEach(t=>t.stop());
+    if(!navigator.mediaDevices?.getUserMedia) throw new Error('unsupported');
+    stopCam();
     state.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:state.facing,width:{ideal:1280},height:{ideal:720}},audio:false});
     video.srcObject=state.stream; await video.play();
-    state.mirror = state.facing==='user';
-    const go=()=>useSource(video,video.videoWidth,video.videoHeight,true, state.facing==='user'?'셀카 카메라':'후면 카메라');
-    if(video.videoWidth) go(); else video.onloadedmetadata=go;
-    $('#camCta').style.display='none';
+    const ok=()=>setSource(video,video.videoWidth,video.videoHeight,true,state.facing==='user');
+    video.videoWidth ? ok() : (video.onloadedmetadata=ok);
   }catch(e){
-    toast('이 화면에서는 카메라를 쓸 수 없어요. 🖼 사진으로 체험하거나, 배포된 주소(https)에서 열어주세요.');
+    $('#deniedMsg').textContent = window.isSecureContext
+      ? '휴대폰 설정에서 이 브라우저의 카메라를 허용하면 바로 볼 수 있어요. 앨범 사진으로도 볼 수 있어요.'
+      : '카메라는 https 주소에서 열 수 있어요. 앨범 사진으로는 지금 바로 볼 수 있어요.';
+    history.replaceState({s:'denied'},''); show('denied');
   }
 }
-$('#camCta').onclick=startCam;
+$('#retryBtn').onclick=()=>{ history.replaceState({s:'cam'},''); show('cam'); startCam(); };
 $('#flipBtn').onclick=()=>{ state.facing = state.facing==='user'?'environment':'user'; startCam(); };
-$('#file').onchange=e=>{
-  const f=e.target.files[0]; if(!f) return;
-  const img=new Image(); img.onload=()=>{ if(state.stream){state.stream.getTracks().forEach(t=>t.stop()); state.stream=null;} state.mirror=false; $('#camCta').style.display='';
-    useSource(img,img.naturalWidth,img.naturalHeight,false,'내 사진'); };
-  img.src=URL.createObjectURL(f); e.target.value='';
-};
+$$('.fileIn').forEach(inp=>inp.onchange=e=>{
+  const f=e.target.files[0]; if(!f) return; e.target.value='';
+  const img=new Image();
+  img.onload=()=>{ stopCam(); setSource(img,img.naturalWidth,img.naturalHeight,false,false);
+    if(current==='denied'){ history.replaceState({s:'cam'},''); show('cam'); } else if(current!=='cam') go('cam');
+    refreshCam(); };
+  img.src=URL.createObjectURL(f);
+});
 
-/* ---------- WebGL ---------- */
-const canvas=$('#view');
-const gl=canvas.getContext('webgl',{preserveDrawingBuffer:true,antialias:false});
-if(!gl){ toast('이 브라우저는 WebGL을 지원하지 않아요.'); return; }
-
-const VS=`attribute vec2 p;varying vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}`;
-const FS_COPY=`precision mediump float;varying vec2 uv;uniform sampler2D t;uniform float mirror;
-void main(){vec2 u=uv; if(mirror>.5)u.x=1.-u.x; gl_FragColor=texture2D(t,u);}`;
-const FS_BLUR=`precision mediump float;varying vec2 uv;uniform sampler2D t;uniform vec2 dir;uniform float w[7];
-void main(){vec4 c=texture2D(t,uv)*w[0];for(int i=1;i<7;i++){float f=float(i);c+=texture2D(t,uv+dir*f)*w[i];c+=texture2D(t,uv-dir*f)*w[i];}gl_FragColor=c;}`;
+/* ---------- WebGL 시선 엔진 ---------- */
+const gc=$('#view');
+const gl=gc.getContext('webgl',{preserveDrawingBuffer:true,antialias:false});
+if(!gl){ toast('이 브라우저는 시선 필터를 지원하지 않아요'); return; }
+const VS='attribute vec2 p;varying vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
+const FS_COPY='precision mediump float;varying vec2 uv;uniform sampler2D t;uniform float mirror;void main(){vec2 u=uv;if(mirror>.5)u.x=1.-u.x;gl_FragColor=texture2D(t,u);}';
+const FS_BLUR='precision mediump float;varying vec2 uv;uniform sampler2D t;uniform vec2 dir;uniform float w[7];void main(){vec4 c=texture2D(t,uv)*w[0];for(int i=1;i<7;i++){float f=float(i);c+=texture2D(t,uv+dir*f)*w[i];c+=texture2D(t,uv-dir*f)*w[i];}gl_FragColor=c;}';
 const FS_FINAL=`precision mediump float;varying vec2 uv;
-uniform sampler2D blurT,sharpT;uniform float split,aspect,cvd,tri,sat,con,gam,gain,vig,vigSoft,vigAmt,fish;uniform vec3 vigCol;uniform mat3 M,T;
+uniform sampler2D blurT,sharpT;uniform float split,aspect,cvd,tri,sat,con,gam,gain,vig;uniform mat3 M,T;
 vec3 lin(vec3 c){return pow(c,vec3(2.2));} vec3 srgb(vec3 c){return pow(max(c,0.),vec3(1./2.2));}
 void main(){
   if(split>=0. && uv.x<split){gl_FragColor=texture2D(sharpT,uv);return;}
-  vec2 d=uv-.5; d.x*=aspect; float r=length(d); float rmax=.5*length(vec2(aspect,1.));
-  if(fish>0. && r>0.){ float nr=rmax*pow(r/rmax,1.+fish); d*=nr/r; }
-  d.x/=aspect;
-  vec3 l=lin(texture2D(blurT,d+.5).rgb);
+  vec3 l=lin(texture2D(blurT,uv).rgb);
   l=mix(l,M*l,cvd); l=mix(l,T*l,tri); l=clamp(l,0.,1.);
   float Y=dot(l,vec3(.2126,.7152,.0722)); l=max(mix(vec3(Y),l,sat),0.);
   l=pow(clamp(l*gain,0.,1.),vec3(gam));
   vec3 s=srgb(l); s=(s-.5)*con+.5;
-  float v=smoothstep(vig,vig+vigSoft,r/rmax)*vigAmt; s=mix(s,vigCol,v);
+  vec2 d=uv-.5; d.x*=aspect; float r=length(d)/(.5*length(vec2(aspect,1.)));
+  s=mix(s,vec3(.45,.43,.4),smoothstep(vig,vig+.35,r)*.8);
   gl_FragColor=vec4(clamp(s,0.,1.),1.);
 }`;
 function prog(fs){ const p=gl.createProgram();
-  [[gl.VERTEX_SHADER,VS],[gl.FRAGMENT_SHADER,fs]].forEach(([t,src])=>{const s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);
-    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s)); gl.attachShader(p,s);});
+  [[gl.VERTEX_SHADER,VS],[gl.FRAGMENT_SHADER,fs]].forEach(([t,src])=>{const s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);gl.attachShader(p,s);});
   gl.bindAttribLocation(p,0,'p'); gl.linkProgram(p); const u={}; p.u=n=>(u[n]??=gl.getUniformLocation(p,n)); return p; }
 const pCopy=prog(FS_COPY), pBlur=prog(FS_BLUR), pFinal=prog(FS_FINAL);
-const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
 gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
 gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-
 function tex(){ const t=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,t);
   [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b)); return t; }
-function target(old,w,h){ if(old && old.w===w && old.h===h) return old;
-  if(old){gl.deleteTexture(old.t);gl.deleteFramebuffer(old.f);}
+function target(o,w,h){ if(o&&o.w===w&&o.h===h) return o; if(o){gl.deleteTexture(o.t);gl.deleteFramebuffer(o.f);}
   const t=tex(); gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
-  const f=gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER,f); gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0);
-  return {t,f,w,h}; }
+  const f=gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER,f); gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0); return {t,f,w,h}; }
 const srcTex=tex(); let S,A,B;
-const W7=[0,1,2,3,4,5,6].map(i=>Math.exp(-.5*(i/2)**2)); const wsum=W7[0]+2*W7.slice(1).reduce((a,b)=>a+b); const WN=W7.map(x=>x/wsum);
-// Machado 2009 (선형 RGB), 행 우선 → 열 우선으로 전치
+const W7=[0,1,2,3,4,5,6].map(i=>Math.exp(-.5*(i/2)**2)); const WS=W7[0]+2*W7.slice(1).reduce((a,b)=>a+b); const WN=W7.map(x=>x/WS);
 const T3=m=>[m[0],m[3],m[6],m[1],m[4],m[7],m[2],m[5],m[8]];
-const DEUTAN=T3([.367322,.860646,-.227968, .280085,.672501,.047413, -.011820,.042940,.968881]);
-const TRITAN=T3([1.255528,-.076749,-.178779, -.078411,.930809,.147602, .004733,.691367,.303900]);
-const HFOV=65; // 휴대폰 카메라 가로 화각(도) 가정
-
+const DEUT=[.367322,.860646,-.227968,.280085,.672501,.047413,-.011820,.042940,.968881];
+const TRIT=[1.255528,-.076749,-.178779,-.078411,.930809,.147602,.004733,.691367,.303900];
+const BOOST=4, HFOV=65;
 function draw(p,fb,w,h){ gl.useProgram(p); gl.bindFramebuffer(gl.FRAMEBUFFER,fb); gl.viewport(0,0,w,h); gl.drawArrays(gl.TRIANGLE_STRIP,0,4); }
-function bindT(unit,t){ gl.activeTexture(gl.TEXTURE0+unit); gl.bindTexture(gl.TEXTURE_2D,t); }
-
-function render(){
-  if(!state.source || !state.srcW) return;
-  if(state.isVideo && video.readyState<2) return;
-  const sc=Math.min(1,960/Math.max(state.srcW,state.srcH));
-  const W=Math.round(state.srcW*sc), H=Math.round(state.srcH*sc);
-  if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;layout();}
+function bindT(u,t){ gl.activeTexture(gl.TEXTURE0+u); gl.bindTexture(gl.TEXTURE_2D,t); }
+function render(src,sw,sh,mirror,p,split){
+  const sc=Math.min(1,960/Math.max(sw,sh)); const W=Math.round(sw*sc), H=Math.round(sh*sc);
+  if(gc.width!==W||gc.height!==H){gc.width=W;gc.height=H;}
   S=target(S,W,H);
-  bindT(0,srcTex); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
-  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,state.source);
-  gl.useProgram(pCopy); gl.uniform1i(pCopy.u('t'),0); gl.uniform1f(pCopy.u('mirror'),state.mirror?1:0); draw(pCopy,S.f,W,H);
-
-  const P=params();
-  const ppd=Math.max(W,H)/HFOV;
-  const sigDeg=.34*Math.sqrt(Math.max(0,1/(P.cpd*P.cpd)-1/900))*state.boost;
-  const sig=sigDeg*ppd;
-  const ds=sig>6?sig/4:1;
-  const aw=Math.max(2,Math.round(W/ds)), ah=Math.max(2,Math.round(H/ds));
+  bindT(0,srcTex); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true); gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,src);
+  gl.useProgram(pCopy); gl.uniform1i(pCopy.u('t'),0); gl.uniform1f(pCopy.u('mirror'),mirror?1:0); draw(pCopy,S.f,W,H);
+  const sig=.34*Math.sqrt(Math.max(0,1/(p.cpd*p.cpd)-1/900))*BOOST*Math.max(W,H)/HFOV;
+  const ds=sig>6?sig/4:1, aw=Math.max(2,Math.round(W/ds)), ah=Math.max(2,Math.round(H/ds));
   A=target(A,aw,ah); B=target(B,aw,ah);
-  bindT(0,S.t); gl.uniform1f(pCopy.u('mirror'),0); draw(pCopy,A.f,aw,ah);
+  bindT(0,S.t); gl.useProgram(pCopy); gl.uniform1f(pCopy.u('mirror'),0); draw(pCopy,A.f,aw,ah);
   const sd=sig*aw/W;
-  if(sd>.3){
-    gl.useProgram(pBlur); gl.uniform1i(pBlur.u('t'),0); gl.uniform1fv(pBlur.u('w'),WN);
-    const st=sd/2;
-    bindT(0,A.t); gl.uniform2f(pBlur.u('dir'),st/aw,0); draw(pBlur,B.f,aw,ah);
-    bindT(0,B.t); gl.uniform2f(pBlur.u('dir'),0,st/ah); draw(pBlur,A.f,aw,ah);
-  }
-  gl.useProgram(pFinal); bindT(0,A.t); bindT(1,S.t);
-  const u=n=>pFinal.u(n);
-  gl.uniform1i(u('blurT'),0); gl.uniform1i(u('sharpT'),1);
-  gl.uniform1f(u('split'),state.compare?state.split:-1); gl.uniform1f(u('aspect'),W/H);
-  gl.uniform1f(u('cvd'),P.cvd); gl.uniform1f(u('tri'),P.tri); gl.uniform1f(u('sat'),P.sat); gl.uniform1f(u('con'),P.con);
-  gl.uniform1f(u('gam'),P.gam); gl.uniform1f(u('gain'),P.gain); gl.uniform1f(u('vig'),P.vig); gl.uniform1f(u('vigSoft'),P.vigSoft);
-  gl.uniform1f(u('vigAmt'),P.vigAmt); gl.uniform3fv(u('vigCol'),P.vigCol); gl.uniform1f(u('fish'),P.fish);
-  gl.uniformMatrix3fv(u('M'),false,DEUTAN); gl.uniformMatrix3fv(u('T'),false,TRITAN);
+  if(sd>.3){ gl.useProgram(pBlur); gl.uniform1i(pBlur.u('t'),0); gl.uniform1fv(pBlur.u('w'),WN);
+    bindT(0,A.t); gl.uniform2f(pBlur.u('dir'),sd/2/aw,0); draw(pBlur,B.f,aw,ah);
+    bindT(0,B.t); gl.uniform2f(pBlur.u('dir'),0,sd/2/ah); draw(pBlur,A.f,aw,ah); }
+  gl.useProgram(pFinal); bindT(0,A.t); bindT(1,S.t); const u=n=>pFinal.u(n);
+  gl.uniform1i(u('blurT'),0); gl.uniform1i(u('sharpT'),1); gl.uniform1f(u('split'),split); gl.uniform1f(u('aspect'),W/H);
+  ['cvd','tri','sat','con','gam','gain','vig'].forEach(k=>gl.uniform1f(u(k),p[k]));
+  gl.uniformMatrix3fv(u('M'),false,T3(DEUT)); gl.uniformMatrix3fv(u('T'),false,T3(TRIT));
   draw(pFinal,null,W,H);
 }
-function loop(){ if(state.dirty||state.isVideo){ render(); state.dirty=false; } requestAnimationFrame(loop); }
-
-/* ---------- 레이아웃 & 비교 슬라이더 ---------- */
-function layout(){
-  const st=$('#stage').getBoundingClientRect(), fr=$('#frame');
-  const ar=(canvas.width||3)/(canvas.height||4);
-  let w=st.width, h=w/ar; if(h>st.height){h=st.height;w=h*ar;}
-  Object.assign(fr.style,{width:w+'px',height:h+'px',left:(st.width-w)/2+'px',top:(st.height-h)/2+'px'});
-  placeDivider();
+function loop(){
+  if(current==='cam' && state.src && state.srcW && (state.dirty||state.isVideo) && !(state.isVideo && video.readyState<2)){
+    const cmp = state.mode!=='baby' && state.compare;
+    render(state.src,state.srcW,state.srcH,state.mirror,P(),cmp?.5:-1); state.dirty=false;
+  }
+  requestAnimationFrame(loop);
 }
-function placeDivider(){ $('#divider').style.left=(state.split*100)+'%'; }
-const fr=$('#frame'); let dragging=false;
-const setSplit=e=>{ const r=fr.getBoundingClientRect(); state.split=Math.min(.98,Math.max(.02,(e.clientX-r.left)/r.width)); placeDivider(); state.dirty=true; };
-fr.addEventListener('pointerdown',e=>{ if(!state.compare) return; dragging=true; fr.setPointerCapture(e.pointerId); setSplit(e); });
-fr.addEventListener('pointermove',e=>{ if(dragging) setSplit(e); });
-fr.addEventListener('pointerup',()=>dragging=false);
-addEventListener('resize',layout);
 
-/* ---------- 촬영 ---------- */
-let lastShot='';
+/* ---------- 색 비교 띠(설명 시트용) ---------- */
+function simHex(hex,p){
+  let c=[0,2,4].map(i=>Math.pow(parseInt(hex.slice(i,i+2),16)/255,2.2));
+  const mul=(m,v)=>[0,1,2].map(r=>m[r*3]*v[0]+m[r*3+1]*v[1]+m[r*3+2]*v[2]);
+  const mix=(a,b,t)=>a.map((x,i)=>x+(b[i]-x)*t);
+  c=mix(c,mul(DEUT,c),p.cvd); c=mix(c,mul(TRIT,c),p.tri); c=c.map(x=>Math.min(1,Math.max(0,x)));
+  const Y=.2126*c[0]+.7152*c[1]+.0722*c[2]; c=c.map(x=>Math.max(0,Y+(x-Y)*p.sat));
+  c=c.map(x=>Math.pow(Math.min(1,x*p.gain),p.gam)).map(x=>Math.pow(x,1/2.2)).map(x=>(x-.5)*p.con+.5);
+  return '#'+c.map(x=>Math.round(Math.min(1,Math.max(0,x))*255).toString(16).padStart(2,'0')).join('');
+}
+const SW=['E5484D','F5822A','F5C518','3DAA55','2F6FED','8B5CF6'];
+
+/* ---------- 설명 시트 ---------- */
+function openSheet(){
+  const k=state.mode, m=MODES[k], d = k==='baby' ? AGES[state.age] : m;
+  $('#shTitle').textContent = k==='baby' ? (state.age===0 ? '신생아는 이렇게 봐요' : `${AGES[state.age].name} 아기는 이렇게 봐요`) : `${m.name}는 이렇게 봐요`;
+  $('#shKv').innerHTML = d.kv.map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+  $('#shStrip').innerHTML = `<div class="r"><span>사람</span><div class="c">${SW.map(h=>`<i style="background:#${h}"></i>`).join('')}</div></div>
+    <div class="r"><span>${m.name}</span><div class="c">${SW.map(h=>`<i style="background:${simHex(h,P())}"></i>`).join('')}</div></div>`;
+  $('#shDesc').textContent = d.desc; $('#shCant').textContent = m.cant; $('#shSrc').textContent = m.src;
+  $('#sheet').classList.add('on');
+}
+function closeSheet(){ $('#sheet').classList.remove('on'); }
+$('#infoBtn').onclick=openSheet;
+$$('[data-close]').forEach(b=>b.onclick=closeSheet);
+
+/* ---------- 촬영 → 가족 시선 한 장 ---------- */
 $('#shutter').onclick=()=>{
-  render();
-  const m=MODES[state.mode], label = state.mode==='baby'?`아기(${AGES[state.age].label})`:m.who;
-  const band=Math.round(canvas.width*.12);
-  const c=document.createElement('canvas'); c.width=canvas.width; c.height=canvas.height+band; const g=c.getContext('2d');
-  g.drawImage(canvas,0,0); g.fillStyle='#121110'; g.fillRect(0,canvas.height,c.width,band);
-  g.fillStyle='#f4ecdf'; g.font=`600 ${Math.round(band*.3)}px "Noto Sans KR",sans-serif`; g.textBaseline='middle';
-  g.fillText(`${m.e} ${label}의 눈으로 본 세상`, band*.3, canvas.height+band/2);
-  g.fillStyle='#a59b8c'; g.textAlign='right'; g.font=`400 ${Math.round(band*.22)}px "Noto Sans KR",sans-serif`;
-  g.fillText('누구의 눈', c.width-band*.3, canvas.height+band/2);
-  lastShot=c.toDataURL('image/jpeg',.92); $('#shot').src=lastShot; $('#sheet').classList.add('on');
+  if(!state.src || !state.srcW){ toast('카메라를 켜거나 앨범에서 사진을 골라주세요'); return; }
+  const c=document.createElement('canvas'); const sc=Math.min(1,1280/Math.max(state.srcW,state.srcH));
+  c.width=Math.round(state.srcW*sc); c.height=Math.round(state.srcH*sc); const g=c.getContext('2d');
+  if(state.mirror){ g.translate(c.width,0); g.scale(-1,1); }
+  g.drawImage(state.src,0,0,c.width,c.height);
+  state.still=c; buildCard(); go('result');
 };
-$('#closeBtn').onclick=()=>$('#sheet').classList.remove('on');
-$('#saveBtn').onclick=()=>{ const a=document.createElement('a'); a.href=lastShot; a.download=`nugu-eye-${state.mode}-${Date.now()}.jpg`; document.body.appendChild(a); a.click(); a.remove(); };
+$('#mchips').innerHTML = ORDER.map(k=>`<button class="mchip" data-k="${k}">${CHECK}${MODES[k].name}</button>`).join('');
+$$('#mchips .mchip').forEach(b=>b.onclick=()=>{ state.members[b.dataset.k]=!state.members[b.dataset.k]; buildCard(); });
 
-/* ---------- 시작 ---------- */
-refreshUI();
-const demo=demoScene(); useSource(demo,demo.width,demo.height,false,'예시 장면');
-requestAnimationFrame(()=>{layout();loop();});
+function rr(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+function buildCard(){
+  $$('#mchips .mchip').forEach(b=>b.setAttribute('aria-pressed', !!state.members[b.dataset.k]));
+  const st=state.still; if(!st) return;
+  const tiles=[{label:'나',p:HUMAN}].concat(ORDER.filter(k=>state.members[k]).map(k=>({label:modeLabel(k),p:k==='baby'?AGES[state.age].p:MODES[k].p})));
+  const T=520, G=12, PAD=24, cols=tiles.length===1?1:2, rows=Math.ceil(tiles.length/cols), FOOT=88;
+  const cw = cols===1 ? T+PAD*2 : T*2+G+PAD*2, ch = PAD+rows*T+(rows-1)*G+FOOT;
+  const cv=document.createElement('canvas'); cv.width=cw; cv.height=ch; const g=cv.getContext('2d');
+  g.fillStyle='#F2F4F6'; g.fillRect(0,0,cw,ch);
+  const side=Math.min(st.width,st.height), sx=(st.width-side)/2, sy=(st.height-side)/2;
+  tiles.forEach((t,i)=>{
+    render(st,st.width,st.height,false,t.p,-1);
+    const x=PAD+(i%cols)*(T+G), y=PAD+Math.floor(i/cols)*(T+G);
+    const k=gc.width/st.width;
+    g.save(); rr(g,x,y,T,T,24); g.clip(); g.drawImage(gc,sx*k,sy*k,side*k,side*k,x,y,T,T); g.restore();
+    g.font='700 36px Pretendard, "Apple SD Gothic Neo", sans-serif'; const tw=g.measureText(t.label).width;
+    g.fillStyle='rgba(16,17,20,.75)'; rr(g,x+16,y+T-76,tw+36,60,18); g.fill();
+    g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(t.label,x+34,y+T-46);
+  });
+  const d=new Date(); const ds=`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}`;
+  g.fillStyle='#4E5968'; g.font='500 30px Pretendard, "Apple SD Gothic Neo", sans-serif'; g.textBaseline='middle';
+  g.fillText(ds,PAD+8,ch-FOOT/2); g.textAlign='right'; g.font='700 30px Pretendard, "Apple SD Gothic Neo", sans-serif'; g.fillText('누구의 눈',cw-PAD-8,ch-FOOT/2);
+  state.cardURL=cv.toDataURL('image/jpeg',.92); state.cardCanvas=cv; $('#cardImg').src=state.cardURL;
+  $('#hint').textContent = state.members.dog ? '강아지 칸에서 빨간색이 누렇게 바뀐 걸 찾아보세요'
+    : state.members.baby ? '아기 칸이 얼마나 흐린지 비교해 보세요'
+    : state.members.cat ? '고양이 칸은 색이 옅고 어두운 곳이 밝아져요' : '넣고 싶은 눈을 골라주세요';
+  state.dirty=true;
+}
+function cardBlob(){ return new Promise(r=>state.cardCanvas.toBlob(r,'image/jpeg',.92)); }
+function download(){ const a=document.createElement('a'); a.href=state.cardURL; a.download=`누구의눈-${Date.now()}.jpg`; document.body.appendChild(a); a.click(); a.remove(); }
+$('#saveBtn').onclick=async()=>{
+  const ios=/iP(hone|ad|od)/.test(navigator.userAgent);
+  if(ios && navigator.canShare){ const f=new File([await cardBlob()],'누구의눈.jpg',{type:'image/jpeg'});
+    if(navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f]}); toast('저장했어요. 가족에게도 보내보세요'); }catch(e){} return; } }
+  download(); toast('저장했어요. 사진을 길게 눌러 저장할 수도 있어요');
+};
+$('#shareBtn').onclick=async()=>{
+  try{ const f=new File([await cardBlob()],'누구의눈.jpg',{type:'image/jpeg'});
+    if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'누구의 눈',text:'우리 가족은 나를 이렇게 봐요 '+location.href}); return; }
+    if(navigator.share){ await navigator.share({title:'누구의 눈',text:'우리 아이와 반려동물은 나를 어떻게 볼까요?',url:location.href}); return; }
+  }catch(e){ if(e.name==='AbortError') return; }
+  download(); toast('이 브라우저는 바로 보내기를 지원하지 않아서 사진으로 저장했어요');
+};
+
+refreshCam(); requestAnimationFrame(loop);
 })();
 </script>
 </body>
