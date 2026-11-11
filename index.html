@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF">
-<title>누구의 눈 — 아이와 반려동물의 시선 카메라</title>
+<title>눈맞춤 — 우리 아이와 반려동물 눈에 비친 나</title>
 <meta name="description" content="우리 아이와 반려동물은 나를 어떻게 볼까요? 아기·강아지·고양이의 눈으로 세상을 비춰보세요.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
@@ -138,7 +138,7 @@
 
 <!-- 1. 시작 -->
 <section class="screen on" id="s-home">
-  <div class="bar" style="padding-left:24px"><span class="t">누구의 눈</span></div>
+  <div class="bar" style="padding-left:24px"><span class="t">눈맞춤</span></div>
   <div class="hero">
     <h1>우리 아이와 반려동물은<br>나를 어떻게 볼까요?</h1>
     <p>내 얼굴을 찍으면 가족의 눈으로 나눠 보여드려요</p>
@@ -197,7 +197,7 @@
 <section class="screen" id="s-result">
   <div class="bar">
     <button class="ib" data-back aria-label="다시 찍기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-    <span class="t">누구의 눈</span>
+    <span class="t">눈맞춤</span>
   </div>
   <div class="rhead">
     <h1 id="rTitle">우리 가족 눈에 비친 나</h1>
@@ -527,24 +527,24 @@ function buildCard(){
     g.fillStyle='#191F28'; g.font=`700 36px ${F}`; g.textBaseline='alphabetic'; g.fillText(VOICE[k](state.call),PAD+4,y+SH+60);
   });
   const d=new Date(); const ds=`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}`;
-  g.textBaseline='middle'; g.fillStyle='#191F28'; g.font=`800 32px ${F}`; g.fillText('누구의 눈',PAD+4,ch-FOOT/2);
+  g.textBaseline='middle'; g.fillStyle='#191F28'; g.font=`800 32px ${F}`; g.fillText('눈맞춤',PAD+4,ch-FOOT/2);
   g.textAlign='right'; g.fillStyle='#4E5968'; g.font=`500 28px ${F}`; g.fillText(ds,CW-PAD-4,ch-FOOT/2); g.textAlign='left';
   state.cardURL=cv.toDataURL('image/jpeg',.92); state.cardCanvas=cv; $('#cardImg').src=state.cardURL;
   $('#cardImg').alt = title+'. '+on.map(k=>`${tagOf(k)}: ${VOICE[k](state.call)}`).join(' ');
   state.dirty=true;
 }
 function cardBlob(){ return new Promise(r=>state.cardCanvas.toBlob(r,'image/jpeg',.92)); }
-function download(){ const a=document.createElement('a'); a.href=state.cardURL; a.download=`누구의눈-${Date.now()}.jpg`; document.body.appendChild(a); a.click(); a.remove(); }
+function download(){ const a=document.createElement('a'); a.href=state.cardURL; a.download=`눈맞춤-${Date.now()}.jpg`; document.body.appendChild(a); a.click(); a.remove(); }
 $('#saveBtn').onclick=async()=>{
   const ios=/iP(hone|ad|od)/.test(navigator.userAgent);
-  if(ios && navigator.canShare){ const f=new File([await cardBlob()],'누구의눈.jpg',{type:'image/jpeg'});
+  if(ios && navigator.canShare){ const f=new File([await cardBlob()],'눈맞춤.jpg',{type:'image/jpeg'});
     if(navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f]}); toast('저장했어요. 가족에게도 보내보세요'); }catch(e){} return; } }
   download(); toast('저장했어요. 사진을 길게 눌러 저장할 수도 있어요');
 };
 $('#shareBtn').onclick=async()=>{
-  try{ const f=new File([await cardBlob()],'누구의눈.jpg',{type:'image/jpeg'});
-    if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'누구의 눈',text:cardTitle()+' '+location.href}); return; }
-    if(navigator.share){ await navigator.share({title:'누구의 눈',text:'우리 아이와 반려동물은 나를 어떻게 볼까요?',url:location.href}); return; }
+  try{ const f=new File([await cardBlob()],'눈맞춤.jpg',{type:'image/jpeg'});
+    if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'눈맞춤',text:cardTitle()+' '+location.href}); return; }
+    if(navigator.share){ await navigator.share({title:'눈맞춤',text:'우리 아이와 반려동물은 나를 어떻게 볼까요?',url:location.href}); return; }
   }catch(e){ if(e.name==='AbortError') return; }
   download(); toast('이 브라우저는 바로 보내기를 지원하지 않아서 사진으로 저장했어요');
 };
