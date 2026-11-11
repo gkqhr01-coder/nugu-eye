@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<title>눈맞춤 — 우리 아이와 반려동물 눈에 비친 나</title>
+<meta name="description" content="우리 아이와 반려동물은 나를 어떻게 볼까요? 아기·강아지·고양이의 눈으로 세상을 비춰보세요.">
+<style>
+  :root{--g50:#F9FAFB;--g100:#F2F4F6;--g200:#E5E8EB;--g300:#D1D6DB;--g500:#8B95A1;--g700:#4E5968;--g800:#333D4B;--g900:#191F28;
+        --blue:#2272EB;--blueBg:#E8F0FD;--blueTx:#1B5BC9;--dark:#101114;--dark2:#24272C;--darkTx:#C9CED4}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#fff;color:var(--g900);font-family:Pretendard,"Apple SD Gothic Neo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  button,a{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-decoration:none;-webkit-tap-highlight-color:transparent}
+  .screen{display:none;flex-direction:column;min-height:100dvh;max-width:480px;margin:0 auto;
+          padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .screen.on{display:flex}
+  .dark{background:var(--dark);color:#fff}
+  .screen.dark{padding-top:calc(env(safe-area-inset-top) + var(--navH,56px))}
+  .screen:not(.dark){padding-top:12px}
+  body.isdark{background:var(--dark)}
+
+  .bar{height:52px;display:flex;align-items:center;gap:8px;padding:0 12px 0 8px;flex-shrink:0}
+  .bar .t{font-size:16px;font-weight:700;flex:1}
+  .ib{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px}
+  .ib svg{width:24px;height:24px}
+
+  /* 홈 */
+  .hero{padding:16px 24px 20px}
+  .hero h1{font-size:24px;line-height:1.4;font-weight:800;letter-spacing:-.4px}
+  .hero p{margin-top:8px;font-size:16px;line-height:1.55;color:var(--g700)}
+  .ex{margin:0 20px;padding:8px;border-radius:20px;background:var(--g100);display:flex;flex-direction:column;gap:4px}
+  .ex .it{display:flex;flex-direction:column;gap:8px;padding:6px 6px 8px;border-radius:14px;width:100%;text-align:left}
+  .ex .it:active{background:var(--g200)}
+  .ex .ph{position:relative;display:block;height:92px;border-radius:12px;overflow:hidden;background:var(--g200)}
+  .ex .ph img{display:block;width:100%;height:100%;object-fit:cover}
+  .pill{position:absolute;top:8px;padding:3px 8px;border-radius:8px;background:rgba(16,17,20,.78);color:#fff;font-size:12px;font-weight:700}
+  .pill.l{left:8px}.pill.r{right:8px}
+  .ex .tx{display:flex;align-items:center;gap:8px;padding:0 2px}
+  .ex .tx>span{flex:1;display:flex;flex-direction:column;gap:1px}
+  .ex b{font-size:16px}
+  .ex small{font-size:13px;color:var(--g700)}
+  .fine{margin:16px 24px 12px;font-size:13px;line-height:1.55;color:var(--g700);text-align:center}
+  .cta{padding:0 20px 24px;display:flex;flex-direction:column;gap:8px}
+  .btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:16px;font-size:17px;font-weight:700;width:100%}
+  .btn.pri{background:var(--blue);color:#fff}
+  .btn.sec{background:var(--blueBg);color:var(--blueTx)}
+  .btn.drk{background:var(--dark2);color:#fff}
+  .btn:active{filter:brightness(.94)}
+  .spacer{flex:1}
+
+  /* 카메라 */
+  .vf{position:relative;margin:4px 12px 0;flex:1;min-height:300px;border-radius:20px;overflow:hidden;background:#22252A}
+  #view{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .vf{touch-action:none}
+  .split{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;display:none;pointer-events:none}
+  .knob{position:absolute;top:50%;left:50%;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:18px;background:#fff;color:var(--g900);display:flex;align-items:center;justify-content:center}
+  .knob svg{width:20px;height:20px}
+  .lbl{position:absolute;top:12px;padding:5px 10px;border-radius:10px;background:rgba(16,17,20,.75);font-size:13px;font-weight:700;display:none;pointer-events:none}
+  .lbl.l{left:12px}.lbl.r{right:12px}
+  .vf.cmp .split,.vf.cmp .lbl{display:block}
+  .tip{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 14px;border-radius:12px;background:rgba(16,17,20,.82);display:flex;flex-direction:column;gap:2px;text-align:left;color:#fff}
+  .tip b{font-size:13px}
+  .tip span{font-size:14px;line-height:1.5;color:var(--g200)}
+  .tip em{font-style:normal;font-size:13px;font-weight:700;color:var(--darkTx);margin-top:2px}
+  .guide{margin:2px 24px 0;font-size:13px;line-height:1.5;color:var(--darkTx);text-align:center;min-height:20px}
+  .chip.cmp{margin-left:auto;display:flex;align-items:center;gap:5px}
+  .chip.cmp svg{width:16px;height:16px}
+  .chip.cmp[aria-pressed=true]{background:#fff;color:var(--g900)}
+  .seg{margin:14px 16px 0;padding:4px;border-radius:12px;background:var(--dark2);display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  .seg button{height:40px;border-radius:9px;font-size:15px;font-weight:700;color:var(--darkTx)}
+  .seg button[aria-pressed=true]{background:#fff;color:var(--g900)}
+  .sub{height:48px;margin-top:6px;padding:0 16px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none}
+  .sub::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;height:34px;padding:0 12px;border-radius:17px;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,.3);color:var(--darkTx)}
+  .chip[aria-pressed=true]{border-color:#fff;color:#fff}
+  .shoot{display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:8px 32px 18px}
+  .rb{width:48px;height:48px;border-radius:24px;background:var(--dark2);display:flex;align-items:center;justify-content:center;color:#fff}
+  .rb svg{width:24px;height:24px}
+  .shutter{justify-self:center;width:76px;height:76px;border-radius:38px;border:4px solid #fff;padding:5px}
+  .shutter span{display:block;width:100%;height:100%;border-radius:50%;background:#fff;transition:transform .1s}
+  .shutter:active span{transform:scale(.88)}
+
+  /* 권한 */
+  .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 32px;text-align:center}
+  .center .big{width:64px;height:64px;border-radius:20px;background:var(--dark2);display:flex;align-items:center;justify-content:center}
+  .center h1{font-size:22px;line-height:1.4;font-weight:800}
+  .center p{font-size:15px;line-height:1.6;color:var(--darkTx)}
+
+  /* 결과 */
+  .rhead{padding:8px 24px 16px}
+  .rhead h1{font-size:22px;line-height:1.4;font-weight:800}
+  .rhead p{margin-top:6px;font-size:15px;line-height:1.55;color:var(--g700)}
+  .card{margin:0 20px;border-radius:20px;overflow:hidden;background:var(--g100)}
+  .card img{display:block;width:100%}
+  .lbl2{padding:20px 24px 10px;font-size:15px;font-weight:700}
+  .chips{padding:0 20px;display:flex;gap:8px;flex-wrap:wrap}
+  .mchip{height:40px;padding:0 14px;border-radius:20px;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;border:1px solid var(--g300);color:var(--g700);background:#fff}
+  .mchip[aria-pressed=true]{background:var(--g900);border-color:var(--g900);color:#fff}
+  .mchip svg{width:16px;height:16px;display:none}
+  .mchip[aria-pressed=true] svg{display:block}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #s-result .cta{position:sticky;bottom:0;padding-top:12px;background:#fff}
+  .btn.gry{background:var(--g100);color:var(--g800)}
+  .mrows{padding:0 20px;display:flex;flex-direction:column;gap:8px}
+  .mrow{display:flex;align-items:center;gap:8px}
+  .mrow .mchip{width:112px;flex-shrink:0}
+  .mrow input{flex:1;min-width:0;height:40px;padding:0 12px;border-radius:12px;border:0;background:var(--g100);font:inherit;font-size:16px;color:var(--g900)}
+  .mrow input::placeholder{color:var(--g500)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;width:calc(100% - 40px);max-width:440px;
+         padding:12px 16px;border-radius:14px;background:var(--g900);color:#fff;font-size:14px;font-weight:500;transition:all .25s;pointer-events:none;z-index:30}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  /* 바텀시트 */
+  .sheet{position:fixed;inset:0;z-index:20;display:none}
+  .sheet.on{display:block}
+  .sheet .dim{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+  .sheet .pn{position:absolute;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;max-height:88dvh;overflow:auto;background:#fff;color:var(--g900);
+             border-radius:24px 24px 0 0;padding:10px 24px calc(24px + env(safe-area-inset-bottom))}
+  .handle{width:40px;height:4px;border-radius:2px;background:var(--g300);margin:0 auto}
+  .pn h2{margin-top:22px;font-size:22px;font-weight:800}
+  .kv{margin-top:14px}
+  .kv div{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100);font-size:15px}
+  .kv div:last-child{border-bottom:0}
+  .kv span{color:var(--g700)} .kv b{text-align:right}
+  .strip{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+  .strip .r{display:flex;align-items:center;gap:10px}
+  .strip .r span{width:48px;font-size:13px;color:var(--g700)}
+  .strip .r .c{flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+  .strip .r .c i{height:28px;border-radius:8px}
+  .pn .desc{margin-top:14px;font-size:15px;line-height:1.65;color:var(--g800)}
+  .box{margin-top:16px;padding:14px 16px;border-radius:14px;background:var(--g100)}
+  .box b{display:block;font-size:14px}
+  .box p{margin-top:4px;font-size:14px;line-height:1.6;color:var(--g700)}
+  .src{margin:16px 0 12px;font-size:12px;line-height:1.55;color:var(--g700)}
+</style>
+</head>
+<body>
+
+<!-- 1. 시작 -->
+<section class="screen on" id="s-home">
+  <div class="hero">
+    <h1>우리 아이와 반려동물은<br>나를 어떻게 볼까요?</h1>
+    <p>내 얼굴을 찍으면 가족의 눈으로 나눠 보여드려요</p>
+  </div>
+  <div class="ex" id="homeList"></div>
+  <div class="spacer"></div>
+  <p class="fine">연구 자료로 만든 재미용 근사치예요.<br>눈 건강이 궁금하면 안과에서 확인해 주세요.</p>
+  <div class="cta"><button class="btn pri" id="startBtn">카메라 켜기</button></div>
+</section>
+
+<!-- 2. 카메라 -->
+<section class="screen dark" id="s-cam">
+  <div class="vf" id="vf">
+    <canvas id="view"></canvas>
+    <div class="split" id="split"><span class="knob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span></div>
+    <span class="lbl l">내 눈</span><span class="lbl r" id="lblR">강아지</span>
+    <button class="tip" id="tipBtn" aria-label="이 눈에 대해 자세히 보기"><b id="tipStat"></b><span id="tip"></span><em>자세히 보기</em></button>
+  </div>
+  <p class="guide" id="guide"></p>
+  <div class="seg" id="seg"></div>
+  <div class="sub" id="sub"></div>
+  <div class="shoot">
+    <label class="rb" style="justify-self:start" aria-label="앨범에서 사진 고르기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>
+      <input type="file" accept="image/*" class="fileIn" hidden>
+    </label>
+    <button class="shutter" id="shutter" aria-label="찍고 가족 시선 한 장 보기"><span></span></button>
+    <button class="rb" style="justify-self:end" id="flipBtn" aria-label="카메라 방향 바꾸기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><path d="M9 13a3 3 0 0 1 5.2-2M15 12a3 3 0 0 1-5.2 2"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- 5. 권한 없음 -->
+<section class="screen dark" id="s-denied">
+  <div class="center">
+    <span class="big"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+    <h1>카메라를 허용하면<br>바로 시작할 수 있어요</h1>
+    <p id="deniedMsg">비춘 화면은 휴대폰 안에서만 바꿔 보여드려요. 사진은 저장하기를 눌렀을 때만 남아요.</p>
+  </div>
+  <div class="cta">
+    <button class="btn pri" id="retryBtn">카메라 허용하기</button>
+    <label class="btn drk">앨범에서 사진 고르기<input type="file" accept="image/*" class="fileIn" hidden></label>
+  </div>
+</section>
+
+<!-- 3. 결과 -->
+<section class="screen" id="s-result">
+  <div class="rhead">
+    <h1 id="rTitle">우리 가족 눈에 비친 나</h1>
+    <p>이름을 넣으면 카드에 들어가요. 이름은 저장하지 않아요.</p>
+  </div>
+  <div class="card"><img id="cardImg" alt="가족 시선 한 장"></div>
+  <div class="lbl2">카드에 넣을 가족과 이름</div>
+  <div class="mrows" id="mrows"></div>
+  <div class="lbl2">가족이 나를 부르는 말</div>
+  <div class="chips" id="callChips"></div>
+  <div class="spacer" style="min-height:24px"></div>
+  <div class="cta two">
+    <button class="btn gry" id="saveBtn">앨범에 저장하기</button>
+    <button class="btn pri" id="shareBtn">가족에게 보내기</button>
+  </div>
+</section>
+
+<!-- 4. 시선 설명 -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="dim" data-close></div>
+  <div class="pn">
+    <div class="handle"></div>
+    <h2 id="shTitle"></h2>
+    <div class="kv" id="shKv"></div>
+    <div class="strip" id="shStrip"></div>
+    <p class="desc" id="shDesc"></p>
+    <div class="box"><b>카메라에 담기 어려운 것도 있어요</b><p id="shCant"></p></div>
+    <p class="src" id="shSrc"></p>
+    <button class="btn pri" data-close>닫기</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
