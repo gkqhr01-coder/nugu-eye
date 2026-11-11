@@ -1,4 +1,4 @@
-import { NavigationBar, Share, File as AitFile, requestPermission, openCamera, getOperationalEnvironment } from '@apps-in-toss/web-framework';
+import { NavigationBar, File as AitFile, requestPermission, openCamera, getOperationalEnvironment } from '@apps-in-toss/web-framework';
 
 (() => {
 
@@ -15,7 +15,7 @@ const NAV = {
 function setNav(id){ if(!IN_TOSS || !NAV[id]) return; NavigationBar.setOptions(NAV[id]).catch(()=>{}); }
 
 async function saveCard(){
-  await AitFile.saveBase64({ data: state.cardURL.split(',')[1], fileName: `눈맞춤-${Date.now()}.jpg`, mimeType: 'image/jpeg' });
+  await AitFile.saveBase64({ data: state.shotURL.split(',')[1], fileName: state.shotName, mimeType: 'image/jpeg' });
 }
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -71,14 +71,9 @@ const MODES = {
 const ORDER=['baby','dog','cat'];
 const state = { mode:'dog', age:2, compare:true, split:.5, facing:'user', stream:null,
                 src:null, srcW:0, srcH:0, isVideo:false, mirror:false, dirty:true,
-                still:null, members:{baby:true,dog:true,cat:true}, names:{baby:'',dog:'',cat:''}, call:'엄마', cardURL:'' };
-const CALLS=['엄마','아빠'];
-const SUB = k => k==='baby' ? AGES[state.age].name : MODES[k].name;
-const VOICE = {
-  baby: c => state.age>=3 ? `이제 ${c} 얼굴이 꽤 또렷하게 보여요` : `세상은 아직 흐릿한데, ${c} 얼굴은 보여요`,
-  dog:  () => '색은 잘 몰라도, 웃는 얼굴은 알아봐요',
-  cat:  c => `불을 꺼도, ${c}는 내가 제일 잘 찾아요`
-};
+                still:null, shotURL:'', shotName:'' };
+/* 결과 제목·파일 이름용: "6개월 아기", "신생아", "강아지" */
+const eyeName = () => state.mode!=='baby' ? MODES[state.mode].name : state.age===0 ? '신생아' : `${AGES[state.age].name} 아기`;
 const P = () => state.mode==='baby' ? AGES[state.age].p : MODES[state.mode].p;
 const modeLabel = (k=state.mode) => k==='baby' ? `아기 · ${AGES[state.age].name}` : MODES[k].name;
 
@@ -209,8 +204,8 @@ const TRIT=[1.255528,-.076749,-.178779,-.078411,.930809,.147602,.004733,.691367,
 const BOOST=2, HFOV=65; // 4 → 2: 흐림보다 색·밝기 차이가 보이도록 (E안 결정)
 function draw(p,fb,w,h){ gl.useProgram(p); gl.bindFramebuffer(gl.FRAMEBUFFER,fb); gl.viewport(0,0,w,h); gl.drawArrays(gl.TRIANGLE_STRIP,0,4); }
 function bindT(u,t){ gl.activeTexture(gl.TEXTURE0+u); gl.bindTexture(gl.TEXTURE_2D,t); }
-function render(src,sw,sh,mirror,p,split){
-  const sc=Math.min(1,960/Math.max(sw,sh)); const W=Math.round(sw*sc), H=Math.round(sh*sc);
+function render(src,sw,sh,mirror,p,split,maxSide=960){
+  const sc=Math.min(1,maxSide/Math.max(sw,sh)); const W=Math.round(sw*sc), H=Math.round(sh*sc);
   if(gc.width!==W||gc.height!==H){gc.width=W;gc.height=H;}
   S=target(S,W,H);
   bindT(0,srcTex); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true); gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,src);
@@ -263,90 +258,40 @@ function closeSheet(){ $('#sheet').classList.remove('on'); }
 $('#tipBtn').onclick=openSheet;
 $$('[data-close]').forEach(b=>b.onclick=closeSheet);
 
-/* ---------- 촬영 → 가족 시선 한 장 ---------- */
+/* ---------- 촬영 → 고른 눈으로 본 사진 한 장 ---------- */
 $('#shutter').onclick=()=>{
   if(!state.src || !state.srcW){ toast('카메라를 켜거나 앨범에서 사진을 골라주세요'); return; }
-  const c=document.createElement('canvas'); const sc=Math.min(1,1280/Math.max(state.srcW,state.srcH));
+  const c=document.createElement('canvas'); const sc=Math.min(1,1600/Math.max(state.srcW,state.srcH));
   c.width=Math.round(state.srcW*sc); c.height=Math.round(state.srcH*sc); const g=c.getContext('2d');
   if(state.mirror){ g.translate(c.width,0); g.scale(-1,1); }
   g.drawImage(state.src,0,0,c.width,c.height);
-  state.still=c; buildCard(); go('result');
+  state.still=c; buildShot(); go('result');
 };
-$('#mrows').innerHTML = ORDER.map(k=>`<div class="mrow"><button class="mchip" data-k="${k}">${CHECK}${MODES[k].name}</button>
-  <label style="flex:1;min-width:0;display:flex"><span class="sr">${MODES[k].name} 이름</span><input type="text" data-k="${k}" maxlength="8" placeholder="이름 (선택)" autocomplete="off"></label></div>`).join('');
-$$('#mrows .mchip').forEach(b=>b.onclick=()=>{ const k=b.dataset.k;
-  if(state.members[k] && ORDER.filter(x=>state.members[x]).length===1){ toast('카드에는 한 명 이상 있어야 해요'); return; }
-  state.members[k]=!state.members[k]; buildCard(); });
-let nameT; $$('#mrows input').forEach(inp=>inp.oninput=()=>{ state.names[inp.dataset.k]=inp.value.trim(); clearTimeout(nameT); nameT=setTimeout(buildCard,300); });
-$('#callChips').innerHTML = CALLS.map(c=>`<button class="mchip" data-c="${c}">${CHECK}${c}</button>`).join('');
-$$('#callChips .mchip').forEach(b=>b.onclick=()=>{ state.call=b.dataset.c; buildCard(); });
-const tagOf = k => state.names[k] ? `${state.names[k]} · ${SUB(k)}` : modeLabel(k);
-function cardTitle(){ const on=ORDER.filter(k=>state.members[k]);
-  return on.length===1 && state.names[on[0]] ? `${state.names[on[0]]} 눈에 비친 나` : '우리 가족 눈에 비친 나'; }
+$('#retakeBtn').onclick=()=>history.back();
 
-function rr(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
-/* 카드: 줄마다 왼쪽은 내 눈, 오른쪽은 가족의 눈. 아래 한 줄은 그 아이 목소리 */
-function buildCard(){
-  $$('#mrows .mchip').forEach(b=>b.setAttribute('aria-pressed', !!state.members[b.dataset.k]));
-  $$('#callChips .mchip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.c===state.call));
-  const title=cardTitle(); $('#rTitle').textContent=title;
+/* 비교선 없이, 고른 눈의 필터만 사진 전체에 적용해요 */
+function buildShot(){
   const st=state.still; if(!st) return;
-  const on=ORDER.filter(k=>state.members[k]);
-  const F='Pretendard, "Apple SD Gothic Neo", sans-serif';
-  const CW=1080, PAD=56, SW=CW-PAD*2, SH=on.length===1?Math.round(SW*.8):Math.round(SW/2.8), HEAD=110, ROW=SH+92, GAP=28, FOOT=110;
-  const ch=PAD+HEAD+on.length*ROW+(on.length-1)*GAP+FOOT;
-  const cv=document.createElement('canvas'); cv.width=CW; cv.height=ch; const g=cv.getContext('2d');
-  g.fillStyle='#FFFFFF'; g.fillRect(0,0,CW,ch);
-  g.fillStyle='#191F28'; g.font=`800 52px ${F}`; g.textBaseline='alphabetic'; g.fillText(title,PAD,PAD+52);
-  const pill=(txt,x,y,right)=>{ g.font=`700 28px ${F}`; const tw=g.measureText(txt).width, w=tw+32;
-    const px=right?x-w:x; g.fillStyle='rgba(16,17,20,.78)'; rr(g,px,y,w,48,14); g.fill();
-    g.fillStyle='#fff'; g.textBaseline='middle'; g.fillText(txt,px+16,y+25); };
-  on.forEach((k,i)=>{
-    const p = k==='baby' ? AGES[state.age].p : MODES[k].p;
-    render(st,st.width,st.height,false,p,.5);
-    const W=gc.width, H=gc.height, ar=SW/SH;
-    let cw=W, chh=W/ar; if(chh>H){ chh=H; cw=H*ar; }
-    const cx=(W-cw)/2, cy=Math.min(H-chh,Math.max(0,H*.42-chh/2));
-    const y=PAD+HEAD+i*(ROW+GAP);
-    g.save(); rr(g,PAD,y,SW,SH,28); g.clip(); g.drawImage(gc,cx,cy,cw,chh,PAD,y,SW,SH);
-    g.fillStyle='#fff'; g.fillRect(PAD+SW/2-2,y,4,SH); g.restore();
-    pill('내 눈',PAD+18,y+18,false); pill(tagOf(k),PAD+SW-18,y+18,true);
-    g.fillStyle='#191F28'; g.font=`700 36px ${F}`; g.textBaseline='alphabetic'; g.fillText(VOICE[k](state.call),PAD+4,y+SH+60);
-  });
-  const d=new Date(); const ds=`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}`;
-  g.textBaseline='middle'; g.fillStyle='#191F28'; g.font=`800 32px ${F}`; g.fillText('눈맞춤',PAD+4,ch-FOOT/2);
-  g.textAlign='right'; g.fillStyle='#4E5968'; g.font=`500 28px ${F}`; g.fillText(ds,CW-PAD-4,ch-FOOT/2); g.textAlign='left';
-  state.cardURL=cv.toDataURL('image/jpeg',.92); state.cardCanvas=cv; $('#cardImg').src=state.cardURL;
-  $('#cardImg').alt = title+'. '+on.map(k=>`${tagOf(k)}: ${VOICE[k](state.call)}`).join(' ');
+  render(st,st.width,st.height,false,P(),-1,1600);
+  const out=document.createElement('canvas'); out.width=gc.width; out.height=gc.height;
+  out.getContext('2d').drawImage(gc,0,0);
+  state.shotCanvas=out; state.shotURL=out.toDataURL('image/jpeg',.92);
+  const name=eyeName(), d=new Date(), pad=n=>String(n).padStart(2,'0');
+  state.shotName=`눈맞춤-${name.replace(/\s/g,'')}-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.jpg`;
+  $('#rTitle').textContent=`${name}의 눈으로 찍었어요`;
+  $('#rDesc').textContent=(state.mode==='baby' ? AGES[state.age] : MODES[state.mode]).tip;
+  $('#cardImg').src=state.shotURL; $('#cardImg').alt=`${name}의 눈으로 본 사진`;
   state.dirty=true;
 }
-function cardBlob(){ return new Promise(r=>state.cardCanvas.toBlob(r,'image/jpeg',.92)); }
-function download(){ const a=document.createElement('a'); a.href=state.cardURL; a.download=`눈맞춤-${Date.now()}.jpg`; document.body.appendChild(a); a.click(); a.remove(); }
+function shotBlob(){ return new Promise(r=>state.shotCanvas.toBlob(r,'image/jpeg',.92)); }
+function download(){ const a=document.createElement('a'); a.href=state.shotURL; a.download=state.shotName; document.body.appendChild(a); a.click(); a.remove(); }
 $('#saveBtn').onclick=async()=>{
-  if(IN_TOSS){ try{ await saveCard(); toast('저장했어요. 가족에게도 보내보세요'); }catch(e){ toast('저장하지 못했어요. 카드를 길게 눌러 저장해 주세요'); } return; }
+  if(IN_TOSS){ try{ await saveCard(); toast('앨범에 저장했어요'); }catch(e){ toast('저장하지 못했어요. 사진을 길게 눌러 저장해 주세요'); } return; }
   const ios=/iP(hone|ad|od)/.test(navigator.userAgent);
-  if(ios && navigator.canShare){ const f=new File([await cardBlob()],'눈맞춤.jpg',{type:'image/jpeg'});
-    if(navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f]}); toast('저장했어요. 가족에게도 보내보세요'); }catch(e){} return; } }
+  if(ios && navigator.canShare){ const f=new File([await shotBlob()],state.shotName,{type:'image/jpeg'});
+    if(navigator.canShare({files:[f]})){ try{ await navigator.share({files:[f]}); toast('저장했어요'); }catch(e){} return; } }
   download(); toast('저장했어요. 사진을 길게 눌러 저장할 수도 있어요');
 };
-$('#shareBtn').onclick=async()=>{
-  if(IN_TOSS){
-    try{ const f=new File([await cardBlob()],'눈맞춤.jpg',{type:'image/jpeg'});
-      if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'눈맞춤'}); return; } }catch(e){ if(e.name==='AbortError') return; }
-    try{ await saveCard(); }catch(e){}
-    try{ const link=await Share.createLink({path:'intoss://nunmatchum'});
-      await Share.sendMessage({message:`${cardTitle()}
-눈맞춤에서 우리 가족 눈에 비친 나를 만들어 보세요
-${link}`});
-      toast('카드는 저장해 뒀어요. 메시지에 사진을 함께 붙여 보내보세요'); }catch(e){ toast('보내지 못했어요. 저장한 카드를 직접 보내주세요'); }
-    return;
-  }
-  try{ const f=new File([await cardBlob()],'눈맞춤.jpg',{type:'image/jpeg'});
-    if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'눈맞춤',text:cardTitle()+' '+location.href}); return; }
-    if(navigator.share){ await navigator.share({title:'눈맞춤',text:'우리 아이와 반려동물은 나를 어떻게 볼까요?',url:location.href}); return; }
-  }catch(e){ if(e.name==='AbortError') return; }
-  download(); toast('이 브라우저는 바로 보내기를 지원하지 않아서 사진으로 저장했어요');
-};
 
-refreshCam(); buildCard(); requestAnimationFrame(loop);
+refreshCam(); requestAnimationFrame(loop);
 })();

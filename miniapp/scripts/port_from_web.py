@@ -59,21 +59,8 @@ js = sub(r"\$\('#retryBtn'\)\.onclick=\(\)=>\{",
 # 저장: 토스 안에서는 File.saveBase64
 js = sub(r"\$\('#saveBtn'\)\.onclick=async\(\)=>\{\n",
          "$('#saveBtn').onclick=async()=>{\n"
-         "  if(IN_TOSS){ try{ await saveCard(); toast('저장했어요. 가족에게도 보내보세요'); }catch(e){ toast('저장하지 못했어요. 카드를 길게 눌러 저장해 주세요'); } return; }\n", js)
-# 보내기: 이미지 공유가 되면 이미지로, 아니면 카드 저장 + 미니앱 링크 메시지
-js = sub(r"\$\('#shareBtn'\)\.onclick=async\(\)=>\{\n",
-         "$('#shareBtn').onclick=async()=>{\n"
-         "  if(IN_TOSS){\n"
-         "    try{ const f=new File([await cardBlob()],'눈맞춤.jpg',{type:'image/jpeg'});\n"
-         "      if(navigator.canShare?.({files:[f]})){ await navigator.share({files:[f],title:'눈맞춤'}); return; } }catch(e){ if(e.name==='AbortError') return; }\n"
-         "    try{ await saveCard(); }catch(e){}\n"
-         "    try{ const link=await Share.createLink({path:'intoss://nunmatchum'});\n"
-         "      await Share.sendMessage({message:`${cardTitle()}\\n눈맞춤에서 우리 가족 눈에 비친 나를 만들어 보세요\\n${link}`});\n"
-         "      toast('카드는 저장해 뒀어요. 메시지에 사진을 함께 붙여 보내보세요'); }catch(e){ toast('보내지 못했어요. 저장한 카드를 직접 보내주세요'); }\n"
-         "    return;\n"
-         "  }\n", js)
-
-head = """import { NavigationBar, Share, File as AitFile, requestPermission, openCamera, getOperationalEnvironment } from '@apps-in-toss/web-framework';
+         "  if(IN_TOSS){ try{ await saveCard(); toast('앨범에 저장했어요'); }catch(e){ toast('저장하지 못했어요. 사진을 길게 눌러 저장해 주세요'); } return; }\n", js)
+head = """import { NavigationBar, File as AitFile, requestPermission, openCamera, getOperationalEnvironment } from '@apps-in-toss/web-framework';
 
 /* 토스 앱(또는 샌드박스) 안인지. 밖에서는 웹 기능으로 동작해요. */
 const IN_TOSS = (() => { try { return !!getOperationalEnvironment(); } catch (e) { return false; } })();
@@ -88,7 +75,7 @@ const NAV = {
 function setNav(id){ if(!IN_TOSS || !NAV[id]) return; NavigationBar.setOptions(NAV[id]).catch(()=>{}); }
 
 async function saveCard(){
-  await AitFile.saveBase64({ data: state.cardURL.split(',')[1], fileName: `눈맞춤-${Date.now()}.jpg`, mimeType: 'image/jpeg' });
+  await AitFile.saveBase64({ data: state.shotURL.split(',')[1], fileName: state.shotName, mimeType: 'image/jpeg' });
 }
 """
 # state·cardTitle은 IIFE 안에 있으므로, 헬퍼를 IIFE 안 맨 앞에 넣는다

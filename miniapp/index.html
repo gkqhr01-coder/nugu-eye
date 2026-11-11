@@ -101,13 +101,8 @@
   .mchip[aria-pressed=true] svg{display:block}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   #s-result .cta{position:sticky;bottom:0;padding-top:12px;background:#fff}
+  #s-result .card img{max-height:62dvh;object-fit:contain;background:var(--g100)}
   .btn.gry{background:var(--g100);color:var(--g800)}
-  .mrows{padding:0 20px;display:flex;flex-direction:column;gap:8px}
-  .mrow{display:flex;align-items:center;gap:8px}
-  .mrow .mchip{width:112px;flex-shrink:0}
-  .mrow input{flex:1;min-width:0;height:40px;padding:0 12px;border-radius:12px;border:0;background:var(--g100);font:inherit;font-size:16px;color:var(--g900)}
-  .mrow input::placeholder{color:var(--g500)}
-  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;width:calc(100% - 40px);max-width:440px;
          padding:12px 16px;border-radius:14px;background:var(--g900);color:#fff;font-size:14px;font-weight:500;transition:all .25s;pointer-events:none;z-index:30}
   .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -142,7 +137,7 @@
 <section class="screen on" id="s-home">
   <div class="hero">
     <h1>우리 아이와 반려동물은<br>나를 어떻게 볼까요?</h1>
-    <p>내 얼굴을 찍으면 가족의 눈으로 나눠 보여드려요</p>
+    <p>보고 싶은 눈을 고르고 찍으면, 그 눈으로 본 사진을 앨범에 저장할 수 있어요</p>
   </div>
   <div class="ex" id="homeList"></div>
   <div class="spacer"></div>
@@ -189,18 +184,14 @@
 <!-- 3. 결과 -->
 <section class="screen" id="s-result">
   <div class="rhead">
-    <h1 id="rTitle">우리 가족 눈에 비친 나</h1>
-    <p>이름을 넣으면 카드에 들어가요. 이름은 저장하지 않아요.</p>
+    <h1 id="rTitle">강아지의 눈으로 찍었어요</h1>
+    <p id="rDesc"></p>
   </div>
-  <div class="card"><img id="cardImg" alt="가족 시선 한 장"></div>
-  <div class="lbl2">카드에 넣을 가족과 이름</div>
-  <div class="mrows" id="mrows"></div>
-  <div class="lbl2">가족이 나를 부르는 말</div>
-  <div class="chips" id="callChips"></div>
+  <div class="card"><img id="cardImg" alt=""></div>
   <div class="spacer" style="min-height:24px"></div>
   <div class="cta two">
-    <button class="btn gry" id="saveBtn">앨범에 저장하기</button>
-    <button class="btn pri" id="shareBtn">가족에게 보내기</button>
+    <button class="btn gry" id="retakeBtn">다시 찍기</button>
+    <button class="btn pri" id="saveBtn">앨범에 저장하기</button>
   </div>
 </section>
 
